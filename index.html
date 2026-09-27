@@ -4,292 +4,309 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>QR Điểm danh V7.4.1</title>
+  <title>QR Điểm danh V7.5</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
-    *{
-      box-sizing:border-box;
+    * {
+      box-sizing: border-box;
     }
 
-    body{
-      margin:0;
-      padding:18px;
-      font-family:Arial,sans-serif;
-      background:#f2f6f8;
-      color:#17324d;
+    body {
+      margin: 0;
+      padding: 18px;
+      font-family: Arial, sans-serif;
+      background: #f2f6f8;
+      color: #17324d;
     }
 
-    .container{
-      max-width:950px;
-      margin:auto;
+    .container {
+      max-width: 950px;
+      margin: auto;
     }
 
-    .header{
-      background:#147c6d;
-      color:white;
-      padding:20px;
-      border-radius:18px;
-      margin-bottom:15px;
+    .header {
+      background: #147c6d;
+      color: white;
+      padding: 20px;
+      border-radius: 18px;
+      margin-bottom: 15px;
     }
 
-    .header h1{
-      margin:0;
-      font-size:28px;
+    .header h1 {
+      margin: 0;
+      font-size: 28px;
     }
 
-    .header p{
-      margin:7px 0 0;
-      opacity:.9;
+    .header p {
+      margin: 7px 0 0;
+      opacity: .9;
     }
 
-    .version{
-      float:right;
-      padding:7px 13px;
-      border:1px solid rgba(255,255,255,.5);
-      border-radius:20px;
-      font-weight:bold;
+    .version {
+      float: right;
+      padding: 7px 13px;
+      border: 1px solid rgba(255,255,255,.5);
+      border-radius: 20px;
+      font-weight: bold;
     }
 
-    .card{
-      background:white;
-      border-radius:16px;
-      padding:20px;
-      margin-bottom:15px;
-      box-shadow:0 5px 20px rgba(0,0,0,.06);
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.06);
     }
 
-    label{
-      display:block;
-      margin-bottom:7px;
-      font-weight:bold;
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: bold;
     }
 
-    input{
-      width:100%;
-      padding:13px;
-      border:1px solid #cbd8df;
-      border-radius:9px;
-      font-size:16px;
-      margin-bottom:15px;
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd8df;
+      border-radius: 9px;
+      font-size: 16px;
+      margin-bottom: 15px;
     }
 
-    .status-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:9px;
-      margin-bottom:15px;
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 9px;
+      margin-bottom: 15px;
     }
 
     .status-btn,
-    .result-btn{
-      padding:14px 8px;
-      border:1px solid #bfd0d8;
-      background:white;
-      border-radius:10px;
-      font-weight:bold;
-      cursor:pointer;
-      color:#17324d;
+    .result-btn,
+    .exit-btn {
+      padding: 14px 8px;
+      border: 1px solid #bfd0d8;
+      background: white;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #17324d;
     }
 
     .status-btn.active,
-    .result-btn.active{
-      background:#168c78;
-      color:white;
-      border-color:#168c78;
+    .result-btn.active,
+    .exit-btn.active {
+      background: #168c78;
+      color: white;
+      border-color: #168c78;
     }
 
-    #studyOptions{
-      display:none;
-      padding:14px;
-      margin-bottom:15px;
-      border-radius:12px;
-      background:#f4f8fa;
+    #studyOptions,
+    #exitOptions {
+      display: none;
+      padding: 14px;
+      margin-bottom: 15px;
+      border-radius: 12px;
+      background: #f4f8fa;
+      border: 1px solid #e0e8eb;
     }
 
-    .result-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:9px;
-      margin-bottom:12px;
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 12px;
     }
 
-    #reasonBox{
-      display:none;
+    .exit-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 9px;
+      margin-bottom: 12px;
     }
 
-    #reader{
-      width:100%;
-      border-radius:14px;
-      overflow:hidden;
-      background:#07121a;
+    #studyReasonBox,
+    #exitReasonBox {
+      display: none;
     }
 
-    .camera-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:10px;
+    .helper {
+      margin: -3px 0 12px;
+      font-size: 13px;
+      color: #687d88;
+      line-height: 1.4;
     }
 
-    .btn{
-      border:0;
-      padding:14px;
-      border-radius:10px;
-      font-size:15px;
-      font-weight:bold;
-      cursor:pointer;
+    #reader {
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07121a;
     }
 
-    .btn-start{
-      background:#168c78;
-      color:white;
+    .camera-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
     }
 
-    .btn-stop{
-      background:#d93d31;
-      color:white;
+    .btn {
+      border: 0;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    #systemStatus{
-      margin-top:12px;
-      padding:13px;
-      text-align:center;
-      border-radius:10px;
-      background:#e7f6f2;
-      color:#08634e;
-      font-weight:bold;
-      line-height:1.5;
+    .btn-start {
+      background: #168c78;
+      color: white;
     }
 
-    #resultCard{
-      display:none;
-      padding:20px;
-      margin-top:15px;
-      border-radius:14px;
-      text-align:center;
+    .btn-stop {
+      background: #d93d31;
+      color: white;
     }
 
-    #resultCard.success{
-      display:block;
-      background:#effaf7;
-      border:2px solid #92d4c3;
+    #systemStatus {
+      margin-top: 12px;
+      padding: 13px;
+      text-align: center;
+      border-radius: 10px;
+      background: #e7f6f2;
+      color: #08634e;
+      font-weight: bold;
+      line-height: 1.5;
     }
 
-    #resultCard.error{
-      display:block;
-      background:#fff3f1;
-      border:2px solid #efaaa3;
+    #resultCard {
+      display: none;
+      padding: 20px;
+      margin-top: 15px;
+      border-radius: 14px;
+      text-align: center;
     }
 
-    #studentName{
-      font-size:27px;
-      font-weight:900;
-      color:#168c78;
-      margin-bottom:7px;
+    #resultCard.success {
+      display: block;
+      background: #effaf7;
+      border: 2px solid #92d4c3;
     }
 
-    #studentClass{
-      font-size:20px;
-      font-weight:bold;
-      margin-bottom:9px;
+    #resultCard.error {
+      display: block;
+      background: #fff3f1;
+      border: 2px solid #efaaa3;
     }
 
-    .result-line{
-      margin:5px 0;
+    #studentName {
+      font-size: 27px;
+      font-weight: 900;
+      color: #168c78;
+      margin-bottom: 7px;
     }
 
-    .stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:15px;
+    #studentClass {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 9px;
     }
 
-    .stat{
-      background:white;
-      padding:15px;
-      border-radius:12px;
-      text-align:center;
-      border:1px solid #dce5e9;
+    .result-line {
+      margin: 5px 0;
     }
 
-    .stat-number{
-      font-size:27px;
-      font-weight:bold;
-      color:#168c78;
+    #attendanceNote {
+      font-weight: bold;
     }
 
-    .table-wrap{
-      width:100%;
-      overflow-x:auto;
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
     }
 
-    table{
-      width:100%;
-      border-collapse:collapse;
-      font-size:14px;
-      min-width:760px;
+    .stat {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid #dce5e9;
+    }
+
+    .stat-number {
+      font-size: 27px;
+      font-weight: bold;
+      color: #168c78;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      min-width: 820px;
     }
 
     th,
-    td{
-      padding:10px 7px;
-      border-bottom:1px solid #e0e7ea;
-      text-align:left;
-      vertical-align:top;
+    td {
+      padding: 10px 7px;
+      border-bottom: 1px solid #e0e7ea;
+      text-align: left;
+      vertical-align: top;
     }
 
-    th{
-      background:#f5f8fa;
-      white-space:nowrap;
+    th {
+      background: #f5f8fa;
+      white-space: nowrap;
     }
 
-    td.reason{
-      max-width:230px;
-      word-break:break-word;
+    td.reason {
+      max-width: 230px;
+      word-break: break-word;
     }
 
-    .empty-value{
-      color:#8a989f;
+    .empty-value {
+      color: #8a989f;
     }
 
-    .note{
-      font-size:12px;
-      color:#73838d;
-      text-align:center;
-      margin-top:15px;
+    .note {
+      font-size: 12px;
+      color: #73838d;
+      text-align: center;
+      margin-top: 15px;
     }
 
-    @media(max-width:650px){
-
-      body{
-        padding:8px;
+    @media(max-width:650px) {
+      body {
+        padding: 8px;
       }
 
-      .status-grid{
-        grid-template-columns:1fr;
+      .status-grid,
+      .camera-grid,
+      .result-grid,
+      .exit-grid {
+        grid-template-columns: 1fr;
       }
 
-      .camera-grid{
-        grid-template-columns:1fr;
+      .card {
+        padding: 14px;
       }
 
-      .result-grid{
-        grid-template-columns:1fr;
+      .header h1 {
+        font-size: 22px;
       }
 
-      .card{
-        padding:14px;
-      }
-
-      .header h1{
-        font-size:22px;
-      }
-
-      table{
-        font-size:12px;
+      table {
+        font-size: 12px;
       }
     }
   </style>
@@ -300,27 +317,19 @@
 <div class="container">
 
   <div class="header">
+    <span class="version">V7.5</span>
 
-    <span class="version">
-      V7.4.1
-    </span>
-
-    <h1>
-      QR ĐIỂM DANH HỌC SINH
-    </h1>
+    <h1>QR ĐIỂM DANH HỌC SINH</h1>
 
     <p>
       Quét liên tục • Tự động ghi nhận • Camera không tắt sau mỗi lượt
     </p>
-
   </div>
 
 
   <div class="card">
 
-    <label>
-      Người điểm danh
-    </label>
+    <label>Người điểm danh</label>
 
     <input
       id="teacher"
@@ -330,9 +339,7 @@
     >
 
 
-    <label>
-      Trạng thái
-    </label>
+    <label>Trạng thái</label>
 
     <div class="status-grid">
 
@@ -360,11 +367,68 @@
     </div>
 
 
+    <!-- ==================================================
+         RA KHỎI TRƯỜNG
+    =================================================== -->
+
+    <div id="exitOptions">
+
+      <label>Lý do ra khỏi trường</label>
+
+      <div class="helper">
+        Mặc định là <b>Về nghỉ</b>. Nếu học sinh chỉ xin ra ngoài
+        và sẽ quay lại trường, chọn lựa chọn tương ứng.
+      </div>
+
+      <div class="exit-grid">
+
+        <button
+          class="exit-btn active"
+          onclick="selectExitResult('Về nghỉ',this)"
+        >
+          VỀ NGHỈ
+        </button>
+
+        <button
+          class="exit-btn"
+          onclick="selectExitResult('Xin ra ngoài - sẽ vào lại',this)"
+        >
+          XIN RA NGOÀI<br>
+          SẼ VÀO LẠI
+        </button>
+
+        <button
+          class="exit-btn"
+          onclick="selectExitResult('Lý do khác',this)"
+        >
+          LÝ DO KHÁC
+        </button>
+
+      </div>
+
+
+      <div id="exitReasonBox">
+
+        <label>Nhập lý do khác</label>
+
+        <input
+          id="exitReason"
+          type="text"
+          placeholder="Ví dụ: Đi khám bệnh, gia đình đón..."
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         VÀO HỌC
+    =================================================== -->
+
     <div id="studyOptions">
 
-      <label>
-        Kết quả vào học
-      </label>
+      <label>Kết quả vào học</label>
 
       <div class="result-grid">
 
@@ -385,14 +449,12 @@
       </div>
 
 
-      <div id="reasonBox">
+      <div id="studyReasonBox">
 
-        <label>
-          Lý do
-        </label>
+        <label>Lý do không vào lớp</label>
 
         <input
-          id="reason"
+          id="studyReason"
           type="text"
           placeholder="Có thể để trống → hệ thống ghi Không lý do"
         >
@@ -402,9 +464,11 @@
     </div>
 
 
-    <label>
-      Camera quét QR
-    </label>
+    <!-- ==================================================
+         CAMERA
+    =================================================== -->
+
+    <label>Camera quét QR</label>
 
     <div id="reader"></div>
 
@@ -432,6 +496,10 @@
       ● SẴN SÀNG
     </div>
 
+
+    <!-- ==================================================
+         KẾT QUẢ
+    =================================================== -->
 
     <div id="resultCard">
 
@@ -473,9 +541,7 @@
           0
         </div>
 
-        <div>
-          THÀNH CÔNG
-        </div>
+        <div>THÀNH CÔNG</div>
 
       </div>
 
@@ -489,9 +555,7 @@
           0
         </div>
 
-        <div>
-          QUÉT TRÙNG
-        </div>
+        <div>QUÉT TRÙNG</div>
 
       </div>
 
@@ -500,51 +564,30 @@
   </div>
 
 
+  <!-- ====================================================
+       LỊCH SỬ
+  ===================================================== -->
+
   <div class="card">
 
-    <h3>
-      Lượt quét gần đây
-    </h3>
+    <h3>Lượt quét gần đây</h3>
 
     <div class="table-wrap">
 
       <table>
 
         <thead>
-
           <tr>
-
-            <th>
-              Thời gian
-            </th>
-
-            <th>
-              Học sinh
-            </th>
-
-            <th>
-              Lớp
-            </th>
-
-            <th>
-              Trạng thái
-            </th>
-
-            <th>
-              Kết quả
-            </th>
-
-            <th>
-              Lý do
-            </th>
-
+            <th>Thời gian</th>
+            <th>Học sinh</th>
+            <th>Lớp</th>
+            <th>Trạng thái</th>
+            <th>Kết quả</th>
+            <th>Lý do</th>
           </tr>
-
         </thead>
 
-
-        <tbody id="historyBody">
-        </tbody>
+        <tbody id="historyBody"></tbody>
 
       </table>
 
@@ -554,7 +597,7 @@
 
 
   <div class="note">
-    V7.4.1 • GitHub Pages + Apps Script • Dữ liệu lưu vào sheet DiemDanh
+    V7.5 • GitHub Pages + Apps Script • Dữ liệu lưu vào sheet DiemDanh
   </div>
 
 </div>
@@ -563,7 +606,7 @@
 <script>
 
 /* =========================================================
-   CẤU HÌNH
+   1. CẤU HÌNH
 ========================================================= */
 
 const API_URL =
@@ -580,54 +623,47 @@ const SAME_QR_LOCK =
 
 
 /* =========================================================
-   BIẾN
+   2. BIẾN HỆ THỐNG
 ========================================================= */
 
-let scanner =
-  null;
+let scanner = null;
 
-let scannerRunning =
-  false;
+let scannerRunning = false;
 
-let processing =
-  false;
+let processing = false;
 
 let selectedStatus =
   'Vào trường';
 
-let selectedResult =
+let selectedStudyResult =
   'Vào lớp';
 
-let lastQr =
-  '';
+let selectedExitResult =
+  'Về nghỉ';
 
-let lastQrTime =
-  0;
+let lastQr = '';
 
-let successCount =
-  0;
+let lastQrTime = 0;
 
-let duplicateCount =
-  0;
+let successCount = 0;
 
-let jsonpResolve =
-  null;
+let duplicateCount = 0;
 
-let jsonpReject =
-  null;
+let jsonpResolve = null;
 
-let jsonpTimer =
-  null;
+let jsonpReject = null;
+
+let jsonpTimer = null;
 
 
 /* =========================================================
-   JSONP CALLBACK
+   3. JSONP CALLBACK
 ========================================================= */
 
 window.qrAttendanceCallback =
-  function(data){
+  function(data) {
 
-    if(!jsonpResolve){
+    if (!jsonpResolve) {
       return;
     }
 
@@ -641,30 +677,27 @@ window.qrAttendanceCallback =
 
 
 /* =========================================================
-   CHỌN TRẠNG THÁI
+   4. CHỌN TRẠNG THÁI
 ========================================================= */
 
 function selectStatus(
   status,
   button
-){
+) {
 
   selectedStatus =
     status;
 
 
   document
-    .querySelectorAll(
-      '.status-btn'
-    )
-    .forEach(
-      function(btn){
+    .querySelectorAll('.status-btn')
+    .forEach(function(btn) {
 
-        btn.classList.remove(
-          'active'
-        );
-      }
-    );
+      btn.classList.remove(
+        'active'
+      );
+
+    });
 
 
   button.classList.add(
@@ -672,54 +705,68 @@ function selectStatus(
   );
 
 
-  const options =
+  const studyOptions =
     document.getElementById(
       'studyOptions'
     );
 
 
-  if(
+  const exitOptions =
+    document.getElementById(
+      'exitOptions'
+    );
+
+
+  studyOptions.style.display =
+    'none';
+
+  exitOptions.style.display =
+    'none';
+
+
+  if (
     status ===
     'Vào học'
-  ){
+  ) {
 
-    options.style.display =
+    studyOptions.style.display =
       'block';
-
   }
-  else{
 
-    options.style.display =
-      'none';
+
+  if (
+    status ===
+    'Ra khỏi trường'
+  ) {
+
+    exitOptions.style.display =
+      'block';
   }
 }
 
 
 /* =========================================================
-   CHỌN KẾT QUẢ VÀO HỌC
+   5. CHỌN KẾT QUẢ VÀO HỌC
 ========================================================= */
 
 function selectStudyResult(
   result,
   button
-){
+) {
 
-  selectedResult =
+  selectedStudyResult =
     result;
 
 
   document
-    .querySelectorAll(
-      '.result-btn'
-    )
-    .forEach(
-      function(btn){
+    .querySelectorAll('.result-btn')
+    .forEach(function(btn) {
 
-        btn.classList.remove(
-          'active'
-        );
-      }
-    );
+      btn.classList.remove(
+        'active'
+      );
+
+    });
 
 
   button.classList.add(
@@ -729,34 +776,96 @@ function selectStudyResult(
 
   const reasonBox =
     document.getElementById(
-      'reasonBox'
+      'studyReasonBox'
     );
 
 
-  if(
+  if (
     result ===
     'Không vào lớp'
-  ){
+  ) {
 
     reasonBox.style.display =
       'block';
 
-  }
-  else{
+  } else {
 
     reasonBox.style.display =
       'none';
+
   }
 }
 
 
 /* =========================================================
-   BẬT CAMERA
+   6. CHỌN LÝ DO RA KHỎI TRƯỜNG
 ========================================================= */
 
-async function startScanner(){
+function selectExitResult(
+  result,
+  button
+) {
 
-  if(scannerRunning){
+  selectedExitResult =
+    result;
+
+
+  document
+    .querySelectorAll('.exit-btn')
+    .forEach(function(btn) {
+
+      btn.classList.remove(
+        'active'
+      );
+
+    });
+
+
+  button.classList.add(
+    'active'
+  );
+
+
+  const reasonBox =
+    document.getElementById(
+      'exitReasonBox'
+    );
+
+
+  if (
+    result ===
+    'Lý do khác'
+  ) {
+
+    reasonBox.style.display =
+      'block';
+
+    setTimeout(function() {
+
+      document
+        .getElementById(
+          'exitReason'
+        )
+        .focus();
+
+    },100);
+
+  } else {
+
+    reasonBox.style.display =
+      'none';
+
+  }
+}
+
+
+/* =========================================================
+   7. BẬT CAMERA
+========================================================= */
+
+async function startScanner() {
+
+  if (scannerRunning) {
     return;
   }
 
@@ -765,19 +874,15 @@ async function startScanner(){
     getTeacher();
 
 
-  if(!teacher){
+  if (!teacher) {
 
     alert(
       'Vui lòng nhập người điểm danh trước khi bật camera.'
     );
 
-
     document
-      .getElementById(
-        'teacher'
-      )
+      .getElementById('teacher')
       .focus();
-
 
     return;
   }
@@ -794,7 +899,7 @@ async function startScanner(){
   );
 
 
-  try{
+  try {
 
     scanner =
       new Html5Qrcode(
@@ -810,8 +915,7 @@ async function startScanner(){
       },
 
       {
-        fps:
-          10,
+        fps: 10,
 
         aspectRatio:
           1.333333,
@@ -820,7 +924,7 @@ async function startScanner(){
           function(
             width,
             height
-          ){
+          ) {
 
             const size =
               Math.floor(
@@ -830,18 +934,17 @@ async function startScanner(){
                 ) * 0.70
               );
 
-
-            return{
-              width:size,
-              height:size
+            return {
+              width: size,
+              height: size
             };
           }
       },
 
       onQrRead,
 
-      function(){
-        // Frame hiện tại chưa có QR.
+      function() {
+        // Không có QR ở frame hiện tại.
       }
     );
 
@@ -854,28 +957,27 @@ async function startScanner(){
       '● CAMERA ĐANG QUÉT — ĐƯA QR HỌC SINH VÀO KHUNG'
     );
 
-  }
-  catch(error){
+  } catch(error) {
 
     scannerRunning =
       false;
-
 
     setSystemStatus(
       '✕ KHÔNG MỞ ĐƯỢC CAMERA: ' +
       errorMessage(error)
     );
+
   }
 }
 
 
 /* =========================================================
-   ĐỌC QR
+   8. ĐỌC QR
 ========================================================= */
 
 async function onQrRead(
   decodedText
-){
+) {
 
   const qr =
     normalizeQr(
@@ -883,17 +985,14 @@ async function onQrRead(
     );
 
 
-  if(
-    !/^HS-[A-Z0-9]+$/.test(
-      qr
-    )
-  ){
-
+  if (
+    !/^HS-[A-Z0-9]+$/.test(qr)
+  ) {
     return;
   }
 
 
-  if(processing){
+  if (processing) {
     return;
   }
 
@@ -902,12 +1001,11 @@ async function onQrRead(
     Date.now();
 
 
-  if(
+  if (
     qr === lastQr &&
     now - lastQrTime <
       SAME_QR_LOCK
-  ){
-
+  ) {
     return;
   }
 
@@ -916,7 +1014,7 @@ async function onQrRead(
     getTeacher();
 
 
-  if(!teacher){
+  if (!teacher) {
 
     setSystemStatus(
       '⚠ CHƯA NHẬP NGƯỜI ĐIỂM DANH'
@@ -925,6 +1023,105 @@ async function onQrRead(
     beepError();
 
     return;
+  }
+
+
+  /*
+   * Xác định Kết quả + Lý do
+   */
+  let result = '';
+
+  let reason = '';
+
+
+  /* -------------------------
+     VÀO HỌC
+  ------------------------- */
+
+  if (
+    selectedStatus ===
+    'Vào học'
+  ) {
+
+    result =
+      selectedStudyResult;
+
+
+    if (
+      selectedStudyResult ===
+      'Không vào lớp'
+    ) {
+
+      reason =
+        document
+          .getElementById(
+            'studyReason'
+          )
+          .value
+          .trim();
+    }
+  }
+
+
+  /* -------------------------
+     RA KHỎI TRƯỜNG
+  ------------------------- */
+
+  if (
+    selectedStatus ===
+    'Ra khỏi trường'
+  ) {
+
+    result =
+      selectedExitResult;
+
+
+    if (
+      selectedExitResult ===
+      'Lý do khác'
+    ) {
+
+      reason =
+        document
+          .getElementById(
+            'exitReason'
+          )
+          .value
+          .trim();
+
+
+      /*
+       * V7.5:
+       * Lý do khác bắt buộc phải nhập.
+       * Không gửi API nếu đang để trống.
+       */
+      if (!reason) {
+
+        setSystemStatus(
+          '⚠ VUI LÒNG NHẬP LÝ DO RA KHỎI TRƯỜNG'
+        );
+
+        document
+          .getElementById(
+            'exitReason'
+          )
+          .focus();
+
+        beepError();
+
+        /*
+         * Khóa QR ngắn để camera không gọi
+         * liên tục khi QR vẫn đang trước camera.
+         */
+        lastQr =
+          qr;
+
+        lastQrTime =
+          now;
+
+        return;
+      }
+    }
   }
 
 
@@ -943,39 +1140,7 @@ async function onQrRead(
   );
 
 
-  let result =
-    '';
-
-  let reason =
-    '';
-
-
-  if(
-    selectedStatus ===
-    'Vào học'
-  ){
-
-    result =
-      selectedResult;
-
-
-    if(
-      selectedResult ===
-      'Không vào lớp'
-    ){
-
-      reason =
-        document
-          .getElementById(
-            'reason'
-          )
-          .value
-          .trim();
-    }
-  }
-
-
-  try{
+  try {
 
     const data =
       await saveAttendanceJsonp(
@@ -992,8 +1157,7 @@ async function onQrRead(
       qr
     );
 
-  }
-  catch(error){
+  } catch(error) {
 
     showError(
       'Không kết nối được Apps Script',
@@ -1009,17 +1173,17 @@ async function onQrRead(
 
     beepError();
 
-  }
-  finally{
+  } finally {
 
     processing =
       false;
+
   }
 }
 
 
 /* =========================================================
-   GỌI API GHI ĐIỂM DANH
+   9. API JSONP
 ========================================================= */
 
 function saveAttendanceJsonp(
@@ -1028,13 +1192,13 @@ function saveAttendanceJsonp(
   status,
   result,
   reason
-){
+) {
 
   return new Promise(
     function(
       resolve,
       reject
-    ){
+    ) {
 
       clearJsonp();
 
@@ -1057,54 +1221,44 @@ function saveAttendanceJsonp(
 
 
       script.onerror =
-        function(){
+        function() {
 
           const rejectNow =
             jsonpReject;
 
-
           clearJsonp();
 
-
-          if(rejectNow){
+          if (rejectNow) {
 
             rejectNow(
               new Error(
                 'Không tải được API Apps Script'
               )
             );
+
           }
         };
 
 
       script.src =
         API_URL +
+
         '?page=api-v7-save' +
 
         '&qr=' +
-        encodeURIComponent(
-          qr
-        ) +
+        encodeURIComponent(qr) +
 
         '&teacher=' +
-        encodeURIComponent(
-          teacher
-        ) +
+        encodeURIComponent(teacher) +
 
         '&status=' +
-        encodeURIComponent(
-          status
-        ) +
+        encodeURIComponent(status) +
 
         '&result=' +
-        encodeURIComponent(
-          result
-        ) +
+        encodeURIComponent(result) +
 
         '&reason=' +
-        encodeURIComponent(
-          reason
-        ) +
+        encodeURIComponent(reason) +
 
         '&callback=' +
         CALLBACK_NAME +
@@ -1115,23 +1269,23 @@ function saveAttendanceJsonp(
 
       jsonpTimer =
         setTimeout(
-          function(){
+          function() {
 
             const rejectNow =
               jsonpReject;
 
-
             clearJsonp();
 
-
-            if(rejectNow){
+            if (rejectNow) {
 
               rejectNow(
                 new Error(
                   'Apps Script không phản hồi sau 15 giây'
                 )
               );
+
             }
+
           },
           API_TIMEOUT
         );
@@ -1140,76 +1294,66 @@ function saveAttendanceJsonp(
       document.body.appendChild(
         script
       );
+
     }
   );
 }
 
 
 /* =========================================================
-   XỬ LÝ KẾT QUẢ
+   10. XỬ LÝ KẾT QUẢ API
 ========================================================= */
 
 function handleAttendanceResult(
   data,
   qr
-){
+) {
 
-  if(
+  if (
     data &&
     data.success
-  ){
+  ) {
 
     successCount++;
 
-
     updateCounters();
-
 
     showSuccess(
       data
     );
 
-
     addHistory(
       data
     );
-
 
     setSystemStatus(
       '✓ ĐÃ GHI ĐIỂM DANH — CAMERA TIẾP TỤC QUÉT'
     );
 
-
     beepSuccess();
-
 
     return;
   }
 
 
-  if(
+  if (
     data &&
     data.duplicate
-  ){
+  ) {
 
     duplicateCount++;
 
-
     updateCounters();
-
 
     showDuplicate(
       data
     );
 
-
     setSystemStatus(
       '⚠ QUÉT TRÙNG — KHÔNG GHI THÊM DỮ LIỆU'
     );
 
-
     beepDuplicate();
-
 
     return;
   }
@@ -1239,12 +1383,12 @@ function handleAttendanceResult(
 
 
 /* =========================================================
-   HIỂN THỊ THÀNH CÔNG
+   11. HIỂN THỊ THÀNH CÔNG
 ========================================================= */
 
 function showSuccess(
   data
-){
+) {
 
   const card =
     document.getElementById(
@@ -1259,16 +1403,14 @@ function showSuccess(
   document.getElementById(
     'studentName'
   ).textContent =
-    data.hoTen ||
-    '';
+    data.hoTen || '';
 
 
   document.getElementById(
     'studentClass'
   ).textContent =
     data.lop
-      ? 'LỚP ' +
-        data.lop
+      ? 'LỚP ' + data.lop
       : '';
 
 
@@ -1276,58 +1418,80 @@ function showSuccess(
     'studentId'
   ).textContent =
     'Mã HS: ' +
-    (
-      data.maHS ||
-      ''
-    );
+    (data.maHS || '');
 
 
   document.getElementById(
     'attendanceStatus'
   ).textContent =
     'Trạng thái: ' +
-    (
-      data.trangThai ||
-      ''
-    );
+    (data.trangThai || '');
 
 
   document.getElementById(
     'attendanceTime'
   ).textContent =
     'Thời gian: ' +
-    (
-      data.thoiGian ||
-      ''
-    );
+    (data.thoiGian || '');
 
 
-  let note =
-    '';
+  let note = '';
 
 
-  if(
-    data.ketQua
-  ){
+  /*
+   * RA KHỎI TRƯỜNG
+   */
+  if (
+    data.trangThai ===
+    'Ra khỏi trường'
+  ) {
 
-    note =
-      data.ketQua;
+    if (
+      data.ketQua ===
+      'Lý do khác'
+    ) {
+
+      note =
+        'Lý do: ' +
+        (
+          data.ghiChu ||
+          'Lý do khác'
+        );
+
+    } else {
+
+      note =
+        'Lý do: ' +
+        (
+          data.ketQua ||
+          'Về nghỉ'
+        );
+
+    }
+
   }
 
 
-  if(
-    data.ghiChu
-  ){
+  /*
+   * VÀO HỌC
+   */
+  else if (
+    data.trangThai ===
+    'Vào học'
+  ) {
 
-    if(note){
+    note =
+      data.ketQua || '';
+
+
+    if (data.ghiChu) {
 
       note +=
-        ' — ';
+        ' — ' +
+        data.ghiChu;
+
     }
 
-
-    note +=
-      data.ghiChu;
   }
 
 
@@ -1339,12 +1503,12 @@ function showSuccess(
 
 
 /* =========================================================
-   HIỂN THỊ TRÙNG
+   12. HIỂN THỊ QUÉT TRÙNG
 ========================================================= */
 
 function showDuplicate(
   data
-){
+) {
 
   const card =
     document.getElementById(
@@ -1367,8 +1531,7 @@ function showDuplicate(
     'studentClass'
   ).textContent =
     data.lop
-      ? 'LỚP ' +
-        data.lop
+      ? 'LỚP ' + data.lop
       : '';
 
 
@@ -1376,8 +1539,7 @@ function showDuplicate(
     'studentId'
   ).textContent =
     data.maHS
-      ? 'Mã HS: ' +
-        data.maHS
+      ? 'Mã HS: ' + data.maHS
       : '';
 
 
@@ -1393,21 +1555,42 @@ function showDuplicate(
     'Không tạo dòng mới';
 
 
+  let detail = '';
+
+
+  if (data.ketQua) {
+
+    detail =
+      data.ketQua;
+
+  }
+
+
+  if (data.ghiChu) {
+
+    detail +=
+      detail
+        ? ' — ' + data.ghiChu
+        : data.ghiChu;
+
+  }
+
+
   document.getElementById(
     'attendanceNote'
   ).textContent =
-    '';
+    detail;
 }
 
 
 /* =========================================================
-   HIỂN THỊ LỖI
+   13. HIỂN THỊ LỖI
 ========================================================= */
 
 function showError(
   message,
   qr
-){
+) {
 
   const card =
     document.getElementById(
@@ -1428,15 +1611,13 @@ function showError(
   document.getElementById(
     'studentClass'
   ).textContent =
-    message ||
-    '';
+    message || '';
 
 
   document.getElementById(
     'studentId'
   ).textContent =
-    qr ||
-    '';
+    qr || '';
 
 
   document.getElementById(
@@ -1459,15 +1640,34 @@ function showError(
 
 
 /* =========================================================
-   LỊCH SỬ QUÉT
+   14. LỊCH SỬ
 
-   V7.4.1:
-   TÁCH RIÊNG KẾT QUẢ VÀ LÝ DO.
+   Quy ước hiển thị:
+
+   Vào trường:
+   Kết quả = —
+   Lý do = —
+
+   Ra khỏi trường / Về nghỉ:
+   Kết quả = Về nghỉ
+   Lý do = —
+
+   Ra khỏi trường / Xin ra ngoài:
+   Kết quả = Xin ra ngoài - sẽ vào lại
+   Lý do = —
+
+   Ra khỏi trường / Lý do khác:
+   Kết quả = Lý do khác
+   Lý do = nội dung nhập
+
+   Vào học:
+   Kết quả = Vào lớp / Không vào lớp
+   Lý do = ghi chú
 ========================================================= */
 
 function addHistory(
   data
-){
+) {
 
   const body =
     document.getElementById(
@@ -1481,25 +1681,12 @@ function addHistory(
     );
 
 
-  /*
-   * Kết quả:
-   * - Vào lớp
-   * - Không vào lớp
-   * - Nếu Vào trường/Ra khỏi trường -> —
-   */
   const ketQua =
     data.ketQua
       ? data.ketQua
       : '—';
 
 
-  /*
-   * Lý do:
-   * Backend đã tự đổi lý do trống thành
-   * "Không lý do" khi Không vào lớp.
-   *
-   * Các trường hợp không có ghi chú -> —
-   */
   const lyDo =
     data.ghiChu
       ? data.ghiChu
@@ -1508,17 +1695,13 @@ function addHistory(
 
   const values = [
 
-    data.thoiGian ||
-    '',
+    data.thoiGian || '',
 
-    data.hoTen ||
-    '',
+    data.hoTen || '',
 
-    data.lop ||
-    '',
+    data.lop || '',
 
-    data.trangThai ||
-    '',
+    data.trangThai || '',
 
     ketQua,
 
@@ -1531,7 +1714,7 @@ function addHistory(
     function(
       value,
       index
-    ){
+    ) {
 
       const td =
         document.createElement(
@@ -1543,35 +1726,32 @@ function addHistory(
         value;
 
 
-      /*
-       * Cột thứ 6 là Lý do.
-       */
-      if(
+      if (
         index === 5
-      ){
+      ) {
 
         td.classList.add(
           'reason'
         );
+
       }
 
 
-      /*
-       * Làm nhẹ ký hiệu —
-       */
-      if(
+      if (
         value === '—'
-      ){
+      ) {
 
         td.classList.add(
           'empty-value'
         );
+
       }
 
 
       row.appendChild(
         td
       );
+
     }
   );
 
@@ -1582,55 +1762,50 @@ function addHistory(
   );
 
 
-  /*
-   * Giữ tối đa 20 lượt
-   * trong phiên làm việc.
-   */
-  while(
+  while (
     body.children.length >
     20
-  ){
+  ) {
 
     body.removeChild(
       body.lastChild
     );
+
   }
 }
 
 
 /* =========================================================
-   TẮT CAMERA
+   15. TẮT CAMERA
 ========================================================= */
 
-async function stopScanner(){
+async function stopScanner() {
 
-  if(
+  if (
     !scanner ||
     !scannerRunning
-  ){
+  ) {
 
     setSystemStatus(
       '● CAMERA ĐÃ TẮT'
     );
 
-
     return;
   }
 
 
-  try{
+  try {
 
     await scanner.stop();
 
-
     scanner.clear();
 
-  }
-  catch(error){
+  } catch(error) {
 
     console.warn(
       error
     );
+
   }
 
 
@@ -1651,19 +1826,16 @@ async function stopScanner(){
 
 
 /* =========================================================
-   XÓA JSONP
+   16. XÓA JSONP
 ========================================================= */
 
-function clearJsonp(){
+function clearJsonp() {
 
-  if(
-    jsonpTimer
-  ){
+  if (jsonpTimer) {
 
     clearTimeout(
       jsonpTimer
     );
-
 
     jsonpTimer =
       null;
@@ -1676,11 +1848,10 @@ function clearJsonp(){
     );
 
 
-  if(
-    oldScript
-  ){
+  if (oldScript) {
 
     oldScript.remove();
+
   }
 
 
@@ -1693,10 +1864,10 @@ function clearJsonp(){
 
 
 /* =========================================================
-   BỘ ĐẾM
+   17. BỘ ĐẾM
 ========================================================= */
 
-function updateCounters(){
+function updateCounters() {
 
   document.getElementById(
     'successCount'
@@ -1712,10 +1883,10 @@ function updateCounters(){
 
 
 /* =========================================================
-   NGƯỜI ĐIỂM DANH
+   18. NGƯỜI ĐIỂM DANH
 ========================================================= */
 
-function getTeacher(){
+function getTeacher() {
 
   return document
     .getElementById(
@@ -1727,41 +1898,40 @@ function getTeacher(){
 
 
 /* =========================================================
-   CHUẨN HÓA QR
+   19. CHUẨN HÓA QR
 ========================================================= */
 
 function normalizeQr(
   value
-){
+) {
 
   return String(
-    value ||
-    ''
+    value || ''
   )
-  .replace(
-    /\u0000/g,
-    ''
-  )
-  .replace(
-    /\r/g,
-    ''
-  )
-  .replace(
-    /\n/g,
-    ''
-  )
-  .trim()
-  .toUpperCase();
+    .replace(
+      /\u0000/g,
+      ''
+    )
+    .replace(
+      /\r/g,
+      ''
+    )
+    .replace(
+      /\n/g,
+      ''
+    )
+    .trim()
+    .toUpperCase();
 }
 
 
 /* =========================================================
-   TRẠNG THÁI HỆ THỐNG
+   20. TRẠNG THÁI HỆ THỐNG
 ========================================================= */
 
 function setSystemStatus(
   text
-){
+) {
 
   document.getElementById(
     'systemStatus'
@@ -1771,10 +1941,10 @@ function setSystemStatus(
 
 
 /* =========================================================
-   ÂM THANH
+   21. ÂM THANH
 ========================================================= */
 
-function beepSuccess(){
+function beepSuccess() {
 
   beep(
     1050,
@@ -1783,7 +1953,7 @@ function beepSuccess(){
 }
 
 
-function beepDuplicate(){
+function beepDuplicate() {
 
   beep(
     650,
@@ -1792,7 +1962,7 @@ function beepDuplicate(){
 }
 
 
-function beepError(){
+function beepError() {
 
   beep(
     350,
@@ -1804,9 +1974,9 @@ function beepError(){
 function beep(
   frequency,
   duration
-){
+) {
 
-  try{
+  try {
 
     const AudioContext =
       window.AudioContext ||
@@ -1847,7 +2017,7 @@ function beep(
 
 
     setTimeout(
-      function(){
+      function() {
 
         oscillator.stop();
 
@@ -1857,25 +2027,21 @@ function beep(
       duration
     );
 
-  }
-  catch(error){
+  } catch(error) {
     // Âm thanh không ảnh hưởng chức năng.
   }
 }
 
 
 /* =========================================================
-   LỖI
+   22. LỖI
 ========================================================= */
 
 function errorMessage(
   error
-){
+) {
 
-  if(
-    !error
-  ){
-
+  if (!error) {
     return 'Không xác định';
   }
 
@@ -1888,32 +2054,28 @@ function errorMessage(
 
 
 /* =========================================================
-   KHỞI TẠO
+   23. KHỞI TẠO
 ========================================================= */
 
 window.addEventListener(
   'load',
-  function(){
+  function() {
 
-    /*
-     * Khôi phục người điểm danh
-     * đã nhập ở lần sử dụng trước.
-     */
     const savedTeacher =
       localStorage.getItem(
         'qr_teacher'
       );
 
 
-    if(
-      savedTeacher
-    ){
+    if (savedTeacher) {
 
       document.getElementById(
         'teacher'
       ).value =
         savedTeacher;
+
     }
+
   }
 );
 

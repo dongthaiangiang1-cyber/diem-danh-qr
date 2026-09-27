@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width,initial-scale=1.0">
 
-  <title>Kiểm tra Camera V7.0</title>
+  <title>QR Scanner V7.1</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box}
 
     body{
       margin:0;
@@ -21,28 +21,36 @@
     }
 
     .box{
-      max-width:750px;
+      max-width:760px;
       margin:auto;
-      padding:25px;
       background:white;
+      padding:22px;
       border-radius:18px;
       box-shadow:0 8px 30px rgba(0,0,0,.08);
-      text-align:center;
     }
 
     h1{
       margin-top:0;
+      text-align:center;
       color:#168672;
     }
 
-    .note{
-      color:#687985;
-      line-height:1.6;
+    .subtitle{
+      text-align:center;
+      color:#6b7d8d;
+      margin-bottom:20px;
+    }
+
+    #reader{
+      width:100%;
+      overflow:hidden;
+      border-radius:14px;
     }
 
     button{
-      margin:8px 4px;
-      padding:14px 22px;
+      width:100%;
+      padding:15px;
+      margin-top:10px;
       border:0;
       border-radius:10px;
       font-size:16px;
@@ -60,36 +68,62 @@
       color:white;
     }
 
-    video{
-      display:block;
-      width:100%;
-      min-height:300px;
-      max-height:520px;
-      margin-top:20px;
-      border-radius:15px;
-      background:#071117;
-      object-fit:cover;
-    }
-
-    #status{
+    .status{
       margin-top:15px;
-      padding:14px;
+      padding:13px;
       border-radius:10px;
+      text-align:center;
       background:#eaf8f4;
       color:#086247;
       font-weight:bold;
-      line-height:1.5;
     }
 
-    #details{
-      margin-top:10px;
-      padding:12px;
-      border-radius:10px;
-      background:#f6f8fa;
-      color:#5d6b76;
+    .result{
+      margin-top:18px;
+      padding:20px;
+      border:2px solid #d7e2e8;
+      border-radius:14px;
+      text-align:center;
+    }
+
+    .result-title{
+      color:#6b7d8d;
       font-size:13px;
-      text-align:left;
-      line-height:1.6;
+      font-weight:bold;
+    }
+
+    #qrValue{
+      margin-top:10px;
+      font-size:25px;
+      font-weight:900;
+      color:#168672;
+      word-break:break-all;
+    }
+
+    #counter{
+      margin-top:8px;
+      color:#6b7d8d;
+    }
+
+    .history{
+      margin-top:18px;
+    }
+
+    .history h3{
+      margin-bottom:8px;
+    }
+
+    #historyList{
+      padding:0;
+      list-style:none;
+    }
+
+    #historyList li{
+      padding:10px;
+      margin-bottom:6px;
+      border-radius:8px;
+      background:#f5f8fa;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -98,181 +132,421 @@
 
 <div class="box">
 
-  <h1>CAMERA ĐIỂM DANH V7.0</h1>
+  <h1>QR ĐIỂM DANH V7.1</h1>
 
-  <p class="note">
-    Đây là bước kiểm tra camera độc lập trước khi
-    kết nối hệ thống điểm danh.
-  </p>
+  <div class="subtitle">
+    Kiểm tra quét QR liên tục
+  </div>
+
+  <div id="reader"></div>
 
   <button
+    id="startBtn"
     class="start"
-    onclick="startCamera()">
-    BẬT CAMERA
+    onclick="startScanner()">
+    BẬT CAMERA QUÉT QR
   </button>
 
   <button
+    id="stopBtn"
     class="stop"
-    onclick="stopCamera()">
+    onclick="stopScanner()">
     TẮT CAMERA
   </button>
 
-  <video
-    id="video"
-    autoplay
-    playsinline
-    muted>
-  </video>
-
-  <div id="status">
-    ● CAMERA CHƯA BẬT
+  <div id="status" class="status">
+    ● SẴN SÀNG
   </div>
 
-  <div id="details">
-    Đang chờ kiểm tra...
+  <div class="result">
+
+    <div class="result-title">
+      MÃ QR VỪA ĐỌC
+    </div>
+
+    <div id="qrValue">
+      Chưa có
+    </div>
+
+    <div id="counter">
+      Đã đọc: 0 lượt
+    </div>
+
+  </div>
+
+  <div class="history">
+
+    <h3>Lịch sử kiểm tra</h3>
+
+    <ul id="historyList"></ul>
+
   </div>
 
 </div>
 
 <script>
 
-let stream = null;
+let scanner = null;
 
-async function startCamera(){
+let running = false;
 
-  const video =
-    document.getElementById('video');
+let lastQr = '';
 
-  const status =
-    document.getElementById('status');
+let lastQrTime = 0;
 
-  const details =
-    document.getElementById('details');
+let count = 0;
+
+const SAME_QR_LOCK = 3000;
+
+
+/* ==============================
+   START
+============================== */
+
+async function startScanner(){
+
+  if(running){
+    return;
+  }
+
+  document.getElementById('status')
+    .innerHTML =
+    '● ĐANG MỞ CAMERA...';
+
 
   try{
 
-    stopCamera(false);
-
-    status.innerHTML =
-      '● ĐANG YÊU CẦU CAMERA...';
-
-    details.innerHTML =
-      'Secure context: ' +
-      window.isSecureContext +
-      '<br>Origin: ' +
-      location.origin;
-
-
-    if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
-      throw new Error(
-        'Trình duyệt không hỗ trợ getUserMedia.'
+    scanner =
+      new Html5Qrcode(
+        'reader',
+        {
+          verbose:false
+        }
       );
 
-    }
+
+    await scanner.start(
+
+      {
+        facingMode:'environment'
+      },
+
+      {
+        fps:10,
+
+        qrbox:function(
+          viewfinderWidth,
+          viewfinderHeight
+        ){
+
+          const size =
+            Math.floor(
+              Math.min(
+                viewfinderWidth,
+                viewfinderHeight
+              ) * 0.70
+            );
+
+          return {
+            width:size,
+            height:size
+          };
+
+        },
+
+        aspectRatio:1.333333
+
+      },
+
+      onQrRead,
+
+      function(){
+        /* không làm gì khi frame chưa có QR */
+      }
+
+    );
 
 
-    stream =
-      await navigator.mediaDevices.getUserMedia({
-
-        audio:false,
-
-        video:{
-          facingMode:{
-            ideal:'environment'
-          }
-        }
-
-      });
+    running = true;
 
 
-    video.srcObject =
-      stream;
-
-    await video.play();
-
-
-    const track =
-      stream.getVideoTracks()[0];
-
-    const settings =
-      track.getSettings();
-
-
-    status.innerHTML =
-      '✓ CAMERA HOẠT ĐỘNG';
-
-
-    details.innerHTML =
-      '<b>Camera:</b> ' +
-      (track.label || 'Không xác định') +
-
-      '<br><b>Độ phân giải:</b> ' +
-      (settings.width || '?') +
-      ' × ' +
-      (settings.height || '?') +
-
-      '<br><b>Secure context:</b> ' +
-      window.isSecureContext +
-
-      '<br><b>Origin:</b> ' +
-      location.origin;
+    document.getElementById('status')
+      .innerHTML =
+      '● CAMERA ĐANG QUÉT — ĐƯA QR VÀO KHUNG';
 
   }
   catch(error){
 
     console.error(error);
 
-    status.innerHTML =
-      '✕ KHÔNG MỞ ĐƯỢC CAMERA';
-
-
-    details.innerHTML =
-      '<b>Lỗi:</b> ' +
-      error.name +
-
-      '<br><b>Nội dung:</b> ' +
-      error.message +
-
-      '<br><b>Secure context:</b> ' +
-      window.isSecureContext +
-
-      '<br><b>Origin:</b> ' +
-      location.origin;
+    document.getElementById('status')
+      .innerHTML =
+      '✕ LỖI CAMERA: ' +
+      (
+        error.message ||
+        error
+      );
 
   }
 
 }
 
 
-function stopCamera(showMessage = true){
+/* ==============================
+   QR DETECTED
+============================== */
 
-  if(stream){
+function onQrRead(decodedText){
 
-    stream.getTracks()
-      .forEach(function(track){
-        track.stop();
-      });
+  const qr =
+    normalizeQr(
+      decodedText
+    );
 
-    stream = null;
 
+  if(!qr){
+    return;
   }
 
 
-  document.getElementById('video')
-    .srcObject = null;
+  /*
+   * Chỉ nhận QR học sinh
+   */
 
-
-  if(showMessage){
+  if(
+    !/^HS-[A-Z0-9]+$/i.test(qr)
+  ){
 
     document.getElementById('status')
       .innerHTML =
-      '● CAMERA ĐÃ TẮT';
+      '⚠ ĐÃ ĐỌC QR NHƯNG KHÔNG PHẢI MÃ HỌC SINH';
+
+    return;
 
   }
+
+
+  const now =
+    Date.now();
+
+
+  /*
+   * Chống việc một QR đứng trước camera
+   * bị đọc liên tục.
+   */
+
+  if(
+    qr === lastQr &&
+    (
+      now -
+      lastQrTime
+    ) <
+    SAME_QR_LOCK
+  ){
+    return;
+  }
+
+
+  lastQr =
+    qr;
+
+  lastQrTime =
+    now;
+
+
+  count++;
+
+
+  document.getElementById('qrValue')
+    .textContent =
+    qr;
+
+
+  document.getElementById('counter')
+    .textContent =
+    'Đã đọc: ' +
+    count +
+    ' lượt';
+
+
+  document.getElementById('status')
+    .innerHTML =
+    '✓ ĐÃ ĐỌC QR — CAMERA TIẾP TỤC HOẠT ĐỘNG';
+
+
+  addHistory(qr);
+
+  beep();
+
+
+  /*
+   * Không stop scanner.
+   * Camera tiếp tục quét học sinh tiếp theo.
+   */
+
+}
+
+
+/* ==============================
+   HISTORY
+============================== */
+
+function addHistory(qr){
+
+  const list =
+    document.getElementById(
+      'historyList'
+    );
+
+
+  const item =
+    document.createElement('li');
+
+
+  const time =
+    new Date()
+      .toLocaleTimeString(
+        'vi-VN'
+      );
+
+
+  item.textContent =
+    time +
+    ' — ' +
+    qr;
+
+
+  list.insertBefore(
+    item,
+    list.firstChild
+  );
+
+
+  while(
+    list.children.length > 10
+  ){
+
+    list.removeChild(
+      list.lastChild
+    );
+
+  }
+
+}
+
+
+/* ==============================
+   NORMALIZE
+============================== */
+
+function normalizeQr(value){
+
+  return String(
+    value || ''
+  )
+  .replace(/\u0000/g,'')
+  .replace(/\r/g,'')
+  .replace(/\n/g,'')
+  .trim()
+  .toUpperCase();
+
+}
+
+
+/* ==============================
+   BEEP
+============================== */
+
+function beep(){
+
+  try{
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    const ctx =
+      new AudioContext();
+
+
+    const oscillator =
+      ctx.createOscillator();
+
+
+    const gain =
+      ctx.createGain();
+
+
+    oscillator.frequency.value =
+      1050;
+
+
+    oscillator.connect(gain);
+
+    gain.connect(
+      ctx.destination
+    );
+
+
+    gain.gain.value =
+      0.12;
+
+
+    oscillator.start();
+
+
+    setTimeout(
+      function(){
+
+        oscillator.stop();
+
+        ctx.close();
+
+      },
+      120
+    );
+
+  }
+  catch(e){}
+
+}
+
+
+/* ==============================
+   STOP
+============================== */
+
+async function stopScanner(){
+
+  if(
+    !scanner ||
+    !running
+  ){
+    return;
+  }
+
+
+  try{
+
+    await scanner.stop();
+
+    scanner.clear();
+
+  }
+  catch(e){
+
+    console.warn(e);
+
+  }
+
+
+  running = false;
+
+
+  document.getElementById('status')
+    .innerHTML =
+    '● CAMERA ĐÃ TẮT';
 
 }
 

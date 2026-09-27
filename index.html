@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <title>QR Điểm danh V7.3</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
+  <title>QR Điểm danh V7.3.1</title>
+
+  <!-- Thư viện đọc QR -->
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
@@ -21,177 +28,210 @@
       color: #17324d;
     }
 
-    .box {
+    .container {
       max-width: 760px;
-      margin: auto;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 20px;
       padding: 22px;
-      background: white;
-      border-radius: 18px;
       box-shadow: 0 8px 30px rgba(0,0,0,.08);
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0;
       text-align: center;
       color: #168672;
+      font-size: 30px;
     }
 
     .subtitle {
+      margin-top: 8px;
       margin-bottom: 20px;
       text-align: center;
-      color: #6b7d8d;
+      color: #687985;
+      font-size: 16px;
     }
 
     #reader {
       width: 100%;
       overflow: hidden;
       border-radius: 14px;
+      background: #07121a;
     }
 
     button {
       width: 100%;
-      margin-top: 10px;
-      padding: 15px;
       border: 0;
       border-radius: 10px;
+      padding: 15px;
+      margin-top: 10px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .start {
+    .btn-start {
       background: #168672;
       color: white;
     }
 
-    .stop {
-      background: #cf3b2d;
+    .btn-stop {
+      background: #d63b2e;
       color: white;
     }
 
     #status {
-      margin-top: 15px;
+      margin-top: 12px;
       padding: 14px;
       border-radius: 10px;
       text-align: center;
-      background: #eaf8f4;
-      color: #086247;
       font-weight: bold;
       line-height: 1.5;
+      background: #e8f7f3;
+      color: #086247;
     }
 
-    .student {
+    .student-card {
       display: none;
-      margin-top: 18px;
+      margin-top: 16px;
       padding: 20px;
-      border: 2px solid #d9e5e9;
-      border-radius: 15px;
+      border-radius: 14px;
       text-align: center;
     }
 
-    .student.success {
+    .student-card.success {
       display: block;
-      border-color: #99d8c8;
-      background: #f2fbf8;
+      background: #f0faf7;
+      border: 2px solid #9ad7c8;
     }
 
-    .student.error {
+    .student-card.error {
       display: block;
-      border-color: #efb1aa;
       background: #fff4f2;
+      border: 2px solid #f0aaa2;
     }
 
-    .name {
-      margin-bottom: 8px;
-      font-size: 28px;
+    #studentName {
+      font-size: 29px;
       font-weight: 900;
       color: #168672;
+      margin-bottom: 8px;
     }
 
-    .class {
-      margin-bottom: 14px;
-      font-size: 21px;
+    #studentClass {
+      font-size: 22px;
       font-weight: bold;
+      margin-bottom: 13px;
     }
 
-    .info {
-      margin: 5px 0;
+    .student-info {
+      margin-top: 6px;
       font-size: 16px;
     }
 
-    .qr {
-      margin-top: 10px;
-      color: #687985;
+    #studentQr {
+      margin-top: 12px;
+      color: #667985;
       font-family: monospace;
       word-break: break-all;
     }
 
     .history {
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .history h3 {
-      margin-bottom: 10px;
+      margin: 0 0 12px 0;
     }
 
     #historyList {
-      margin: 0;
       padding: 0;
+      margin: 0;
       list-style: none;
     }
 
     #historyList li {
-      margin-bottom: 7px;
       padding: 11px;
-      border-radius: 9px;
+      margin-bottom: 7px;
       background: #f5f8fa;
+      border-radius: 9px;
       line-height: 1.5;
     }
 
-    .checking {
-      opacity: .65;
+    .small {
+      margin-top: 15px;
+      text-align: center;
+      color: #80909b;
+      font-size: 12px;
     }
+
   </style>
 </head>
 
+
 <body>
 
-<div class="box">
+<div class="container">
 
-  <h1>QR ĐIỂM DANH V7.3</h1>
+  <h1>QR ĐIỂM DANH V7.3.1</h1>
 
   <div class="subtitle">
     Camera → QR → Apps Script → HOC_SINH
   </div>
 
+
+  <!-- CAMERA -->
   <div id="reader"></div>
 
-  <button class="start" onclick="startScanner()">
+
+  <!-- NÚT -->
+  <button
+    class="btn-start"
+    onclick="startScanner()"
+  >
     BẬT CAMERA QUÉT QR
   </button>
 
-  <button class="stop" onclick="stopScanner()">
+  <button
+    class="btn-stop"
+    onclick="stopScanner()"
+  >
     TẮT CAMERA
   </button>
 
+
+  <!-- TRẠNG THÁI -->
   <div id="status">
     ● SẴN SÀNG
   </div>
 
-  <div id="studentBox" class="student">
 
-    <div id="studentName" class="name"></div>
+  <!-- THÔNG TIN HỌC SINH -->
+  <div
+    id="studentCard"
+    class="student-card"
+  >
 
-    <div id="studentClass" class="class"></div>
+    <div id="studentName"></div>
 
-    <div id="studentId" class="info"></div>
+    <div id="studentClass"></div>
 
-    <div id="studentStatus" class="info"></div>
+    <div
+      id="studentId"
+      class="student-info"
+    ></div>
 
-    <div id="studentQr" class="qr"></div>
+    <div
+      id="studentStatus"
+      class="student-info"
+    ></div>
+
+    <div id="studentQr"></div>
 
   </div>
 
+
+  <!-- LỊCH SỬ -->
   <div class="history">
 
     <h3>Lịch sử kiểm tra</h3>
@@ -200,79 +240,172 @@
 
   </div>
 
+
+  <div class="small">
+    V7.3.1 • JSONP • Chưa ghi dữ liệu điểm danh
+  </div>
+
 </div>
+
 
 <script>
 
-/* ==========================================================
-   APPS SCRIPT WEB APP
-========================================================== */
+/* =========================================================
+   1. CẤU HÌNH
+========================================================= */
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbzuQFFbBkdTl_BV6sYRJIEAFk-yMI9p8BN2SrjjUzXkkO2ihkjeWPkjdCZseSudEyKPLg/exec';
 
 
-/* ==========================================================
-   BIẾN HỆ THỐNG
-========================================================== */
+const JSONP_CALLBACK =
+  'qrStudentCallback';
+
+
+const SAME_QR_LOCK =
+  3000;
+
+
+const API_TIMEOUT =
+  15000;
+
+
+/* =========================================================
+   2. BIẾN HỆ THỐNG
+========================================================= */
 
 let scanner = null;
-let running = false;
+
+let scannerRunning = false;
+
 let processing = false;
 
 let lastQr = '';
+
 let lastQrTime = 0;
 
-const SAME_QR_LOCK = 3000;
+let jsonpResolve = null;
+
+let jsonpReject = null;
+
+let jsonpTimer = null;
 
 
-/* ==========================================================
-   BẬT CAMERA
-========================================================== */
+/* =========================================================
+   3. CALLBACK JSONP CỐ ĐỊNH
+========================================================= */
+
+/*
+ * Apps Script sẽ trả về dạng:
+ *
+ * qrStudentCallback({...});
+ *
+ * Hàm này PHẢI nằm ở phạm vi window.
+ */
+
+window.qrStudentCallback =
+  function(data) {
+
+    if (!jsonpResolve) {
+      return;
+    }
+
+
+    const resolve =
+      jsonpResolve;
+
+
+    clearJsonpRequest();
+
+
+    resolve(data);
+  };
+
+
+/* =========================================================
+   4. BẬT CAMERA
+========================================================= */
 
 async function startScanner() {
 
-  if (running) {
+  if (scannerRunning) {
+
+    setStatus(
+      '● CAMERA ĐANG HOẠT ĐỘNG'
+    );
+
     return;
   }
 
-  setStatus('● ĐANG MỞ CAMERA...');
+
+  setStatus(
+    '● ĐANG MỞ CAMERA...'
+  );
+
 
   try {
 
-    scanner = new Html5Qrcode('reader');
+    scanner =
+      new Html5Qrcode(
+        'reader'
+      );
+
 
     await scanner.start(
 
       {
-        facingMode: 'environment'
+        facingMode:
+          'environment'
       },
 
       {
         fps: 10,
 
-        qrbox: function(width, height) {
+        aspectRatio:
+          1.333333,
 
-          const size =
-            Math.floor(
-              Math.min(width, height) * 0.70
-            );
+        qrbox:
+          function(
+            width,
+            height
+          ) {
 
-          return {
-            width: size,
-            height: size
-          };
-        }
+            const size =
+              Math.floor(
+                Math.min(
+                  width,
+                  height
+                ) * 0.70
+              );
+
+
+            return {
+
+              width:
+                size,
+
+              height:
+                size
+
+            };
+          }
       },
 
       onQrRead,
 
       function() {
-        // Chưa đọc được QR ở frame hiện tại.
+        /*
+         * Không cần xử lý khi
+         * một frame chưa có QR.
+         */
       }
+
     );
 
-    running = true;
+
+    scannerRunning =
+      true;
+
 
     setStatus(
       '● CAMERA ĐANG QUÉT — ĐƯA QR HỌC SINH VÀO KHUNG'
@@ -281,30 +414,51 @@ async function startScanner() {
   }
   catch (error) {
 
-    console.error(error);
+    console.error(
+      'Camera error:',
+      error
+    );
+
+
+    scannerRunning =
+      false;
+
 
     setStatus(
       '✕ KHÔNG MỞ ĐƯỢC CAMERA: ' +
       getErrorMessage(error)
     );
+
   }
+
 }
 
 
-/* ==========================================================
-   KHI CAMERA ĐỌC ĐƯỢC QR
-========================================================== */
+/* =========================================================
+   5. ĐỌC QR
+========================================================= */
 
-async function onQrRead(decodedText) {
+async function onQrRead(
+  decodedText
+) {
 
-  const qr = normalizeQr(decodedText);
+  const qr =
+    normalizeQr(
+      decodedText
+    );
+
 
   if (!qr) {
     return;
   }
 
 
-  if (!/^HS-[A-Z0-9]+$/i.test(qr)) {
+  /*
+   * Chỉ nhận QR học sinh.
+   */
+  if (
+    !/^HS-[A-Z0-9]+$/.test(qr)
+  ) {
 
     setStatus(
       '⚠ QR KHÔNG PHẢI MÃ HỌC SINH'
@@ -314,26 +468,43 @@ async function onQrRead(decodedText) {
   }
 
 
-  const now = Date.now();
-
-
+  /*
+   * Khi đang tra một học sinh,
+   * không gửi thêm yêu cầu.
+   */
   if (processing) {
     return;
   }
 
 
+  const now =
+    Date.now();
+
+
+  /*
+   * Chống camera đọc cùng một
+   * mã liên tục.
+   */
   if (
     qr === lastQr &&
-    now - lastQrTime < SAME_QR_LOCK
+    now - lastQrTime <
+      SAME_QR_LOCK
   ) {
+
     return;
   }
 
 
-  lastQr = qr;
-  lastQrTime = now;
+  lastQr =
+    qr;
 
-  processing = true;
+
+  lastQrTime =
+    now;
+
+
+  processing =
+    true;
 
 
   setStatus(
@@ -343,37 +514,33 @@ async function onQrRead(decodedText) {
   );
 
 
-  const box =
-    document.getElementById(
-      'studentBox'
-    );
-
-  box.classList.add('checking');
-
-
   try {
 
-    /*
-     * QUAN TRỌNG:
-     * V7.3 sử dụng JSONP.
-     * Không sử dụng fetch().
-     */
-    const student =
-      await lookupStudentJsonp(qr);
+    const data =
+      await lookupStudentJsonp(
+        qr
+      );
 
 
     if (
-      student &&
-      student.success
+      data &&
+      data.success
     ) {
 
-      showStudent(student);
+      showStudent(
+        data
+      );
 
-      addHistory(student);
+
+      addHistory(
+        data
+      );
+
 
       setStatus(
         '✓ TÌM THẤY HỌC SINH — CAMERA TIẾP TỤC QUÉT'
       );
+
 
       beepSuccess();
 
@@ -381,9 +548,9 @@ async function onQrRead(decodedText) {
     else {
 
       const message =
-        student &&
-        student.message
-          ? student.message
+        data &&
+        data.message
+          ? data.message
           : 'Không tìm thấy học sinh';
 
 
@@ -394,17 +561,22 @@ async function onQrRead(decodedText) {
 
 
       setStatus(
-        '✕ ' + message
+        '✕ ' +
+        message
       );
 
 
       beepError();
+
     }
 
   }
   catch (error) {
 
-    console.error(error);
+    console.error(
+      'JSONP error:',
+      error
+    );
 
 
     showError(
@@ -424,32 +596,37 @@ async function onQrRead(decodedText) {
   }
   finally {
 
-    box.classList.remove(
-      'checking'
-    );
+    processing =
+      false;
 
-    processing = false;
   }
+
 }
 
 
-/* ==========================================================
-   JSONP
-   GitHub Pages → Apps Script
-========================================================== */
+/* =========================================================
+   6. TRA HỌC SINH BẰNG JSONP
+========================================================= */
 
-function lookupStudentJsonp(qr) {
+function lookupStudentJsonp(
+  qr
+) {
 
   return new Promise(
     function(resolve, reject) {
 
-      const callbackName =
-        '__qrCallback_' +
-        Date.now() +
-        '_' +
-        Math.random()
-          .toString(36)
-          .slice(2);
+      /*
+       * Xóa request cũ nếu có.
+       */
+      clearJsonpRequest();
+
+
+      jsonpResolve =
+        resolve;
+
+
+      jsonpReject =
+        reject;
 
 
       const script =
@@ -458,124 +635,161 @@ function lookupStudentJsonp(qr) {
         );
 
 
-      let finished = false;
+      script.id =
+        'jsonp-api';
 
 
-      const timer =
-        setTimeout(
-          function() {
-
-            if (finished) {
-              return;
-            }
-
-            finished = true;
-
-            cleanup();
-
-            reject(
-              new Error(
-                'Apps Script không phản hồi sau 10 giây'
-              )
-            );
-
-          },
-          10000
-        );
-
-
-      function cleanup() {
-
-        clearTimeout(timer);
-
-        try {
-          delete window[callbackName];
-        }
-        catch (error) {
-          window[callbackName] = undefined;
-        }
-
-        if (
-          script &&
-          script.parentNode
-        ) {
-          script.parentNode.removeChild(
-            script
-          );
-        }
-      }
-
-
-      window[callbackName] =
-        function(data) {
-
-          if (finished) {
-            return;
-          }
-
-          finished = true;
-
-          cleanup();
-
-          resolve(data);
-        };
-
-
+      /*
+       * Nếu trình duyệt không
+       * tải được script.
+       */
       script.onerror =
         function() {
 
-          if (finished) {
-            return;
+          const rejectCurrent =
+            jsonpReject;
+
+
+          clearJsonpRequest();
+
+
+          if (
+            rejectCurrent
+          ) {
+
+            rejectCurrent(
+              new Error(
+                'Không tải được API Apps Script'
+              )
+            );
+
           }
 
-          finished = true;
-
-          cleanup();
-
-          reject(
-            new Error(
-              'Không tải được API Apps Script'
-            )
-          );
         };
 
 
+      /*
+       * URL có dạng:
+       *
+       * .../exec
+       * ?page=api-v7-test
+       * &qr=HS-...
+       * &callback=qrStudentCallback
+       */
       script.src =
         API_URL +
         '?page=api-v7-test' +
         '&qr=' +
-        encodeURIComponent(qr) +
-        '&callback=' +
         encodeURIComponent(
-          callbackName
+          qr
         ) +
-        '&_=' +
+        '&callback=' +
+        JSONP_CALLBACK +
+        '&t=' +
         Date.now();
 
 
-      document.head.appendChild(
+      /*
+       * Nếu Apps Script không
+       * gọi callback sau 15 giây.
+       */
+      jsonpTimer =
+        setTimeout(
+          function() {
+
+            const rejectCurrent =
+              jsonpReject;
+
+
+            clearJsonpRequest();
+
+
+            if (
+              rejectCurrent
+            ) {
+
+              rejectCurrent(
+                new Error(
+                  'Apps Script không phản hồi sau 15 giây'
+                )
+              );
+
+            }
+
+          },
+          API_TIMEOUT
+        );
+
+
+      /*
+       * Gắn script vào trang.
+       */
+      document.body.appendChild(
         script
       );
 
     }
   );
+
 }
 
 
-/* ==========================================================
-   HIỂN THỊ HỌC SINH
-========================================================== */
+/* =========================================================
+   7. XÓA REQUEST JSONP
+========================================================= */
 
-function showStudent(student) {
+function clearJsonpRequest() {
 
-  const box =
+  if (jsonpTimer) {
+
+    clearTimeout(
+      jsonpTimer
+    );
+
+    jsonpTimer =
+      null;
+  }
+
+
+  const oldScript =
     document.getElementById(
-      'studentBox'
+      'jsonp-api'
     );
 
 
-  box.className =
-    'student success';
+  if (oldScript) {
+
+    oldScript.remove();
+
+  }
+
+
+  jsonpResolve =
+    null;
+
+
+  jsonpReject =
+    null;
+
+}
+
+
+/* =========================================================
+   8. HIỂN THỊ HỌC SINH
+========================================================= */
+
+function showStudent(
+  student
+) {
+
+  const card =
+    document.getElementById(
+      'studentCard'
+    );
+
+
+  card.className =
+    'student-card success';
 
 
   document.getElementById(
@@ -588,7 +802,8 @@ function showStudent(student) {
     'studentClass'
   ).textContent =
     student.lop
-      ? 'LỚP ' + student.lop
+      ? 'LỚP ' +
+        student.lop
       : '';
 
 
@@ -596,37 +811,45 @@ function showStudent(student) {
     'studentId'
   ).textContent =
     'Mã HS: ' +
-    (student.maHS || '');
+    (
+      student.maHS || ''
+    );
 
 
   document.getElementById(
     'studentStatus'
   ).textContent =
     'Trạng thái: ' +
-    (student.trangThai || '');
+    (
+      student.trangThai || ''
+    );
 
 
   document.getElementById(
     'studentQr'
   ).textContent =
     student.maQR || '';
+
 }
 
 
-/* ==========================================================
-   HIỂN THỊ LỖI
-========================================================== */
+/* =========================================================
+   9. HIỂN THỊ LỖI
+========================================================= */
 
-function showError(message, qr) {
+function showError(
+  message,
+  qr
+) {
 
-  const box =
+  const card =
     document.getElementById(
-      'studentBox'
+      'studentCard'
     );
 
 
-  box.className =
-    'student error';
+  card.className =
+    'student-card error';
 
 
   document.getElementById(
@@ -643,26 +866,31 @@ function showError(message, qr) {
 
   document.getElementById(
     'studentId'
-  ).textContent = '';
+  ).textContent =
+    '';
 
 
   document.getElementById(
     'studentStatus'
-  ).textContent = '';
+  ).textContent =
+    '';
 
 
   document.getElementById(
     'studentQr'
   ).textContent =
     qr || '';
+
 }
 
 
-/* ==========================================================
-   LỊCH SỬ TRA CỨU
-========================================================== */
+/* =========================================================
+   10. LỊCH SỬ TRA CỨU
+========================================================= */
 
-function addHistory(student) {
+function addHistory(
+  student
+) {
 
   const list =
     document.getElementById(
@@ -699,27 +927,38 @@ function addHistory(student) {
   );
 
 
+  /*
+   * Chỉ giữ 10 lượt gần nhất.
+   */
   while (
-    list.children.length > 10
+    list.children.length >
+    10
   ) {
 
     list.removeChild(
       list.lastChild
     );
+
   }
+
 }
 
 
-/* ==========================================================
-   TẮT CAMERA
-========================================================== */
+/* =========================================================
+   11. TẮT CAMERA
+========================================================= */
 
 async function stopScanner() {
 
   if (
     !scanner ||
-    !running
+    !scannerRunning
   ) {
+
+    setStatus(
+      '● CAMERA ĐÃ TẮT'
+    );
+
     return;
   }
 
@@ -728,57 +967,86 @@ async function stopScanner() {
 
     await scanner.stop();
 
+
     scanner.clear();
 
   }
   catch (error) {
 
-    console.warn(error);
+    console.warn(
+      'Stop camera:',
+      error
+    );
+
   }
 
 
-  running = false;
-  processing = false;
+  scannerRunning =
+    false;
+
+
+  processing =
+    false;
+
+
+  clearJsonpRequest();
 
 
   setStatus(
     '● CAMERA ĐÃ TẮT'
   );
+
 }
 
 
-/* ==========================================================
-   CHUẨN HÓA QR
-========================================================== */
+/* =========================================================
+   12. CHUẨN HÓA QR
+========================================================= */
 
-function normalizeQr(value) {
+function normalizeQr(
+  value
+) {
 
   return String(
     value || ''
   )
-  .replace(/\u0000/g, '')
-  .replace(/\r/g, '')
-  .replace(/\n/g, '')
+  .replace(
+    /\u0000/g,
+    ''
+  )
+  .replace(
+    /\r/g,
+    ''
+  )
+  .replace(
+    /\n/g,
+    ''
+  )
   .trim()
   .toUpperCase();
+
 }
 
 
-/* ==========================================================
-   STATUS
-========================================================== */
+/* =========================================================
+   13. HIỂN THỊ TRẠNG THÁI
+========================================================= */
 
-function setStatus(text) {
+function setStatus(
+  text
+) {
 
   document.getElementById(
     'status'
-  ).textContent = text;
+  ).textContent =
+    text;
+
 }
 
 
-/* ==========================================================
-   ÂM THANH
-========================================================== */
+/* =========================================================
+   14. ÂM THANH THÀNH CÔNG
+========================================================= */
 
 function beepSuccess() {
 
@@ -786,8 +1054,13 @@ function beepSuccess() {
     1050,
     120
   );
+
 }
 
+
+/* =========================================================
+   15. ÂM THANH LỖI
+========================================================= */
 
 function beepError() {
 
@@ -795,10 +1068,18 @@ function beepError() {
     350,
     300
   );
+
 }
 
 
-function beep(frequency, duration) {
+/* =========================================================
+   16. TẠO ÂM THANH
+========================================================= */
+
+function beep(
+  frequency,
+  duration
+) {
 
   try {
 
@@ -823,14 +1104,18 @@ function beep(frequency, duration) {
       frequency;
 
 
-    oscillator.connect(gain);
+    oscillator.connect(
+      gain
+    );
+
 
     gain.connect(
       ctx.destination
     );
 
 
-    gain.gain.value = 0.12;
+    gain.gain.value =
+      0.12;
 
 
     oscillator.start();
@@ -849,26 +1134,43 @@ function beep(frequency, duration) {
 
   }
   catch (error) {
-    // Âm thanh không ảnh hưởng chức năng chính.
+
+    /*
+     * Nếu trình duyệt chặn âm thanh,
+     * hệ thống vẫn tiếp tục hoạt động.
+     */
+
   }
+
 }
 
 
-/* ==========================================================
-   ERROR
-========================================================== */
+/* =========================================================
+   17. LẤY THÔNG BÁO LỖI
+========================================================= */
 
-function getErrorMessage(error) {
+function getErrorMessage(
+  error
+) {
 
   if (!error) {
+
     return 'Không xác định';
+
   }
+
 
   if (error.message) {
+
     return error.message;
+
   }
 
-  return String(error);
+
+  return String(
+    error
+  );
+
 }
 
 </script>

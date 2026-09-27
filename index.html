@@ -1,248 +1,463 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <title>QR Điểm danh V7.4</title>
 
-  <title>QR Điểm danh V7.3.1</title>
-
-  <!-- Thư viện đọc QR -->
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
+    *{box-sizing:border-box}
 
-    * {
-      box-sizing: border-box;
+    body{
+      margin:0;
+      padding:18px;
+      font-family:Arial,sans-serif;
+      background:#f2f6f8;
+      color:#17324d;
     }
 
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f2f6f8;
-      color: #17324d;
+    .container{
+      max-width:900px;
+      margin:auto;
     }
 
-    .container {
-      max-width: 760px;
-      margin: 0 auto;
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 22px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    .header{
+      background:#147c6d;
+      color:white;
+      padding:20px;
+      border-radius:18px;
+      margin-bottom:15px;
     }
 
-    h1 {
-      margin: 0;
-      text-align: center;
-      color: #168672;
-      font-size: 30px;
+    .header h1{
+      margin:0;
+      font-size:28px;
     }
 
-    .subtitle {
-      margin-top: 8px;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #687985;
-      font-size: 16px;
+    .header p{
+      margin:7px 0 0;
+      opacity:.9;
     }
 
-    #reader {
-      width: 100%;
-      overflow: hidden;
-      border-radius: 14px;
-      background: #07121a;
+    .version{
+      float:right;
+      padding:7px 13px;
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:20px;
+      font-weight:bold;
     }
 
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 10px;
-      padding: 15px;
-      margin-top: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
+    .card{
+      background:white;
+      border-radius:16px;
+      padding:20px;
+      margin-bottom:15px;
+      box-shadow:0 5px 20px rgba(0,0,0,.06);
     }
 
-    .btn-start {
-      background: #168672;
-      color: white;
+    label{
+      display:block;
+      margin-bottom:7px;
+      font-weight:bold;
     }
 
-    .btn-stop {
-      background: #d63b2e;
-      color: white;
+    input{
+      width:100%;
+      padding:13px;
+      border:1px solid #cbd8df;
+      border-radius:9px;
+      font-size:16px;
+      margin-bottom:15px;
     }
 
-    #status {
-      margin-top: 12px;
-      padding: 14px;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: bold;
-      line-height: 1.5;
-      background: #e8f7f3;
-      color: #086247;
+    .status-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:9px;
+      margin-bottom:15px;
     }
 
-    .student-card {
-      display: none;
-      margin-top: 16px;
-      padding: 20px;
-      border-radius: 14px;
-      text-align: center;
+    .status-btn,
+    .result-btn{
+      padding:14px 8px;
+      border:1px solid #bfd0d8;
+      background:white;
+      border-radius:10px;
+      font-weight:bold;
+      cursor:pointer;
+      color:#17324d;
     }
 
-    .student-card.success {
-      display: block;
-      background: #f0faf7;
-      border: 2px solid #9ad7c8;
+    .status-btn.active,
+    .result-btn.active{
+      background:#168c78;
+      color:white;
+      border-color:#168c78;
     }
 
-    .student-card.error {
-      display: block;
-      background: #fff4f2;
-      border: 2px solid #f0aaa2;
+    #studyOptions{
+      display:none;
+      padding:14px;
+      margin-bottom:15px;
+      border-radius:12px;
+      background:#f4f8fa;
     }
 
-    #studentName {
-      font-size: 29px;
-      font-weight: 900;
-      color: #168672;
-      margin-bottom: 8px;
+    .result-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-bottom:12px;
     }
 
-    #studentClass {
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 13px;
+    #reasonBox{
+      display:none;
     }
 
-    .student-info {
-      margin-top: 6px;
-      font-size: 16px;
+    #reader{
+      width:100%;
+      border-radius:14px;
+      overflow:hidden;
+      background:#07121a;
     }
 
-    #studentQr {
-      margin-top: 12px;
-      color: #667985;
-      font-family: monospace;
-      word-break: break-all;
+    .camera-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
     }
 
-    .history {
-      margin-top: 22px;
+    .btn{
+      border:0;
+      padding:14px;
+      border-radius:10px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
     }
 
-    .history h3 {
-      margin: 0 0 12px 0;
+    .btn-start{
+      background:#168c78;
+      color:white;
     }
 
-    #historyList {
-      padding: 0;
-      margin: 0;
-      list-style: none;
+    .btn-stop{
+      background:#d93d31;
+      color:white;
     }
 
-    #historyList li {
-      padding: 11px;
-      margin-bottom: 7px;
-      background: #f5f8fa;
-      border-radius: 9px;
-      line-height: 1.5;
+    #systemStatus{
+      margin-top:12px;
+      padding:13px;
+      text-align:center;
+      border-radius:10px;
+      background:#e7f6f2;
+      color:#08634e;
+      font-weight:bold;
+      line-height:1.5;
     }
 
-    .small {
-      margin-top: 15px;
-      text-align: center;
-      color: #80909b;
-      font-size: 12px;
+    #resultCard{
+      display:none;
+      padding:20px;
+      margin-top:15px;
+      border-radius:14px;
+      text-align:center;
     }
 
+    #resultCard.success{
+      display:block;
+      background:#effaf7;
+      border:2px solid #92d4c3;
+    }
+
+    #resultCard.error{
+      display:block;
+      background:#fff3f1;
+      border:2px solid #efaaa3;
+    }
+
+    #studentName{
+      font-size:27px;
+      font-weight:900;
+      color:#168c78;
+      margin-bottom:7px;
+    }
+
+    #studentClass{
+      font-size:20px;
+      font-weight:bold;
+      margin-bottom:9px;
+    }
+
+    .result-line{
+      margin:5px 0;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:15px;
+    }
+
+    .stat{
+      background:white;
+      padding:15px;
+      border-radius:12px;
+      text-align:center;
+      border:1px solid #dce5e9;
+    }
+
+    .stat-number{
+      font-size:27px;
+      font-weight:bold;
+      color:#168c78;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:14px;
+    }
+
+    th,td{
+      padding:10px 7px;
+      border-bottom:1px solid #e0e7ea;
+      text-align:left;
+    }
+
+    th{
+      background:#f5f8fa;
+    }
+
+    .note{
+      font-size:12px;
+      color:#73838d;
+      text-align:center;
+      margin-top:15px;
+    }
+
+    @media(max-width:650px){
+      body{padding:8px}
+
+      .status-grid{
+        grid-template-columns:1fr;
+      }
+
+      .camera-grid{
+        grid-template-columns:1fr;
+      }
+
+      .result-grid{
+        grid-template-columns:1fr;
+      }
+
+      .card{
+        padding:14px;
+      }
+
+      .header h1{
+        font-size:22px;
+      }
+
+      table{
+        font-size:12px;
+      }
+    }
   </style>
 </head>
-
 
 <body>
 
 <div class="container">
 
-  <h1>QR ĐIỂM DANH V7.3.1</h1>
+  <div class="header">
+    <span class="version">V7.4</span>
 
-  <div class="subtitle">
-    Camera → QR → Apps Script → HOC_SINH
+    <h1>QR ĐIỂM DANH HỌC SINH</h1>
+
+    <p>Quét liên tục • Tự động ghi nhận • Camera không tắt sau mỗi lượt</p>
   </div>
 
 
-  <!-- CAMERA -->
-  <div id="reader"></div>
+  <div class="card">
+
+    <label>Người điểm danh</label>
+
+    <input
+      id="teacher"
+      type="text"
+      placeholder="Nhập họ tên người điểm danh"
+      autocomplete="name"
+    >
 
 
-  <!-- NÚT -->
-  <button
-    class="btn-start"
-    onclick="startScanner()"
-  >
-    BẬT CAMERA QUÉT QR
-  </button>
+    <label>Trạng thái</label>
 
-  <button
-    class="btn-stop"
-    onclick="stopScanner()"
-  >
-    TẮT CAMERA
-  </button>
+    <div class="status-grid">
+
+      <button
+        class="status-btn active"
+        data-status="Vào trường"
+        onclick="selectStatus('Vào trường',this)"
+      >
+        VÀO TRƯỜNG
+      </button>
+
+      <button
+        class="status-btn"
+        data-status="Ra khỏi trường"
+        onclick="selectStatus('Ra khỏi trường',this)"
+      >
+        RA KHỎI TRƯỜNG
+      </button>
+
+      <button
+        class="status-btn"
+        data-status="Vào học"
+        onclick="selectStatus('Vào học',this)"
+      >
+        VÀO HỌC
+      </button>
+
+    </div>
 
 
-  <!-- TRẠNG THÁI -->
-  <div id="status">
-    ● SẴN SÀNG
+    <div id="studyOptions">
+
+      <label>Kết quả vào học</label>
+
+      <div class="result-grid">
+
+        <button
+          class="result-btn active"
+          onclick="selectStudyResult('Vào lớp',this)"
+        >
+          VÀO LỚP
+        </button>
+
+        <button
+          class="result-btn"
+          onclick="selectStudyResult('Không vào lớp',this)"
+        >
+          KHÔNG VÀO LỚP
+        </button>
+
+      </div>
+
+
+      <div id="reasonBox">
+
+        <label>Lý do</label>
+
+        <input
+          id="reason"
+          type="text"
+          placeholder="Có thể để trống → hệ thống ghi Không lý do"
+        >
+
+      </div>
+
+    </div>
+
+
+    <label>Camera quét QR</label>
+
+    <div id="reader"></div>
+
+
+    <div class="camera-grid">
+
+      <button
+        class="btn btn-start"
+        onclick="startScanner()"
+      >
+        BẬT CAMERA QUÉT LIÊN TỤC
+      </button>
+
+      <button
+        class="btn btn-stop"
+        onclick="stopScanner()"
+      >
+        TẮT CAMERA
+      </button>
+
+    </div>
+
+
+    <div id="systemStatus">
+      ● SẴN SÀNG
+    </div>
+
+
+    <div id="resultCard">
+
+      <div id="studentName"></div>
+
+      <div id="studentClass"></div>
+
+      <div id="studentId" class="result-line"></div>
+
+      <div id="attendanceStatus" class="result-line"></div>
+
+      <div id="attendanceTime" class="result-line"></div>
+
+      <div id="attendanceNote" class="result-line"></div>
+
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+        <div id="successCount" class="stat-number">0</div>
+        <div>THÀNH CÔNG</div>
+      </div>
+
+      <div class="stat">
+        <div id="duplicateCount" class="stat-number">0</div>
+        <div>QUÉT TRÙNG</div>
+      </div>
+
+    </div>
+
   </div>
 
 
-  <!-- THÔNG TIN HỌC SINH -->
-  <div
-    id="studentCard"
-    class="student-card"
-  >
+  <div class="card">
 
-    <div id="studentName"></div>
+    <h3>Lượt quét gần đây</h3>
 
-    <div id="studentClass"></div>
+    <div style="overflow-x:auto">
 
-    <div
-      id="studentId"
-      class="student-info"
-    ></div>
+      <table>
 
-    <div
-      id="studentStatus"
-      class="student-info"
-    ></div>
+        <thead>
+          <tr>
+            <th>Thời gian</th>
+            <th>Học sinh</th>
+            <th>Lớp</th>
+            <th>Trạng thái</th>
+            <th>Kết quả</th>
+          </tr>
+        </thead>
 
-    <div id="studentQr"></div>
+        <tbody id="historyBody"></tbody>
 
-  </div>
+      </table>
 
-
-  <!-- LỊCH SỬ -->
-  <div class="history">
-
-    <h3>Lịch sử kiểm tra</h3>
-
-    <ul id="historyList"></ul>
+    </div>
 
   </div>
 
 
-  <div class="small">
-    V7.3.1 • JSONP • Chưa ghi dữ liệu điểm danh
+  <div class="note">
+    V7.4 • GitHub Pages + Apps Script • Dữ liệu lưu vào sheet DiemDanh
   </div>
 
 </div>
@@ -251,27 +466,29 @@
 <script>
 
 /* =========================================================
-   1. CẤU HÌNH
+   CẤU HÌNH
 ========================================================= */
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbzuQFFbBkdTl_BV6sYRJIEAFk-yMI9p8BN2SrjjUzXkkO2ihkjeWPkjdCZseSudEyKPLg/exec';
+  'https://script.google.com/macros/s/AKfycbyHnf5LzsV3nFw8vXVB2r-yxtOOCda7DADP82avkveTF8vLbO5SlKGWbXkhf14GdlUqmQ/exec';
 
-
-const JSONP_CALLBACK =
-  'qrStudentCallback';
-
-
-const SAME_QR_LOCK =
-  3000;
-
+const CALLBACK_NAME =
+  'qrAttendanceCallback';
 
 const API_TIMEOUT =
   15000;
 
+/*
+ * Backend đã chống trùng 30 giây.
+ * Frontend khóa ngắn để camera không gửi liên tục
+ * hàng chục request cho cùng một QR.
+ */
+const SAME_QR_LOCK =
+  3000;
+
 
 /* =========================================================
-   2. BIẾN HỆ THỐNG
+   BIẾN
 ========================================================= */
 
 let scanner = null;
@@ -280,9 +497,19 @@ let scannerRunning = false;
 
 let processing = false;
 
+let selectedStatus =
+  'Vào trường';
+
+let selectedResult =
+  'Vào lớp';
+
 let lastQr = '';
 
 let lastQrTime = 0;
+
+let successCount = 0;
+
+let duplicateCount = 0;
 
 let jsonpResolve = null;
 
@@ -292,58 +519,133 @@ let jsonpTimer = null;
 
 
 /* =========================================================
-   3. CALLBACK JSONP CỐ ĐỊNH
+   JSONP CALLBACK
 ========================================================= */
 
-/*
- * Apps Script sẽ trả về dạng:
- *
- * qrStudentCallback({...});
- *
- * Hàm này PHẢI nằm ở phạm vi window.
- */
+window.qrAttendanceCallback =
+  function(data){
 
-window.qrStudentCallback =
-  function(data) {
-
-    if (!jsonpResolve) {
+    if(!jsonpResolve){
       return;
     }
-
 
     const resolve =
       jsonpResolve;
 
-
-    clearJsonpRequest();
-
+    clearJsonp();
 
     resolve(data);
   };
 
 
 /* =========================================================
-   4. BẬT CAMERA
+   CHỌN TRẠNG THÁI
 ========================================================= */
 
-async function startScanner() {
+function selectStatus(status,button){
 
-  if (scannerRunning) {
+  selectedStatus =
+    status;
 
-    setStatus(
-      '● CAMERA ĐANG HOẠT ĐỘNG'
+  document
+    .querySelectorAll('.status-btn')
+    .forEach(function(btn){
+      btn.classList.remove('active');
+    });
+
+  button.classList.add('active');
+
+
+  const options =
+    document.getElementById(
+      'studyOptions'
     );
+
+  if(status === 'Vào học'){
+
+    options.style.display =
+      'block';
+
+  }else{
+
+    options.style.display =
+      'none';
+
+  }
+}
+
+
+/* =========================================================
+   CHỌN KẾT QUẢ VÀO HỌC
+========================================================= */
+
+function selectStudyResult(result,button){
+
+  selectedResult =
+    result;
+
+  document
+    .querySelectorAll('.result-btn')
+    .forEach(function(btn){
+      btn.classList.remove('active');
+    });
+
+  button.classList.add('active');
+
+
+  document.getElementById(
+    'reasonBox'
+  ).style.display =
+    result === 'Không vào lớp'
+      ? 'block'
+      : 'none';
+}
+
+
+/* =========================================================
+   BẬT CAMERA
+========================================================= */
+
+async function startScanner(){
+
+  if(scannerRunning){
+    return;
+  }
+
+
+  const teacher =
+    getTeacher();
+
+
+  if(!teacher){
+
+    alert(
+      'Vui lòng nhập người điểm danh trước khi bật camera.'
+    );
+
+    document.getElementById(
+      'teacher'
+    ).focus();
 
     return;
   }
 
 
-  setStatus(
+  /*
+   * Lưu tên trên chính trình duyệt.
+   */
+  localStorage.setItem(
+    'qr_teacher',
+    teacher
+  );
+
+
+  setSystemStatus(
     '● ĐANG MỞ CAMERA...'
   );
 
 
-  try {
+  try{
 
     scanner =
       new Html5Qrcode(
@@ -359,45 +661,32 @@ async function startScanner() {
       },
 
       {
-        fps: 10,
+        fps:10,
 
         aspectRatio:
           1.333333,
 
-        qrbox:
-          function(
-            width,
-            height
-          ) {
+        qrbox:function(width,height){
 
-            const size =
-              Math.floor(
-                Math.min(
-                  width,
-                  height
-                ) * 0.70
-              );
+          const size =
+            Math.floor(
+              Math.min(
+                width,
+                height
+              ) * 0.70
+            );
 
-
-            return {
-
-              width:
-                size,
-
-              height:
-                size
-
-            };
-          }
+          return{
+            width:size,
+            height:size
+          };
+        }
       },
 
       onQrRead,
 
-      function() {
-        /*
-         * Không cần xử lý khi
-         * một frame chưa có QR.
-         */
+      function(){
+        // Frame chưa đọc được QR.
       }
 
     );
@@ -407,40 +696,29 @@ async function startScanner() {
       true;
 
 
-    setStatus(
+    setSystemStatus(
       '● CAMERA ĐANG QUÉT — ĐƯA QR HỌC SINH VÀO KHUNG'
     );
 
   }
-  catch (error) {
-
-    console.error(
-      'Camera error:',
-      error
-    );
-
+  catch(error){
 
     scannerRunning =
       false;
 
-
-    setStatus(
+    setSystemStatus(
       '✕ KHÔNG MỞ ĐƯỢC CAMERA: ' +
-      getErrorMessage(error)
+      errorMessage(error)
     );
-
   }
-
 }
 
 
 /* =========================================================
-   5. ĐỌC QR
+   KHI ĐỌC QR
 ========================================================= */
 
-async function onQrRead(
-  decodedText
-) {
+async function onQrRead(decodedText){
 
   const qr =
     normalizeQr(
@@ -448,31 +726,15 @@ async function onQrRead(
     );
 
 
-  if (!qr) {
-    return;
-  }
-
-
-  /*
-   * Chỉ nhận QR học sinh.
-   */
-  if (
+  if(
     !/^HS-[A-Z0-9]+$/.test(qr)
-  ) {
-
-    setStatus(
-      '⚠ QR KHÔNG PHẢI MÃ HỌC SINH'
-    );
+  ){
 
     return;
   }
 
 
-  /*
-   * Khi đang tra một học sinh,
-   * không gửi thêm yêu cầu.
-   */
-  if (processing) {
+  if(processing){
     return;
   }
 
@@ -481,15 +743,26 @@ async function onQrRead(
     Date.now();
 
 
-  /*
-   * Chống camera đọc cùng một
-   * mã liên tục.
-   */
-  if (
+  if(
     qr === lastQr &&
     now - lastQrTime <
       SAME_QR_LOCK
-  ) {
+  ){
+    return;
+  }
+
+
+  const teacher =
+    getTeacher();
+
+
+  if(!teacher){
+
+    setSystemStatus(
+      '⚠ CHƯA NHẬP NGƯỜI ĐIỂM DANH'
+    );
+
+    beepError();
 
     return;
   }
@@ -498,132 +771,109 @@ async function onQrRead(
   lastQr =
     qr;
 
-
   lastQrTime =
     now;
-
 
   processing =
     true;
 
 
-  setStatus(
-    '⏳ ĐÃ ĐỌC ' +
-    qr +
-    ' — ĐANG TRA HỌC SINH...'
+  setSystemStatus(
+    '⏳ ĐÃ ĐỌC QR — ĐANG GHI ĐIỂM DANH...'
   );
 
 
-  try {
+  let result = '';
+  let reason = '';
+
+
+  if(
+    selectedStatus ===
+    'Vào học'
+  ){
+
+    result =
+      selectedResult;
+
+
+    if(
+      selectedResult ===
+      'Không vào lớp'
+    ){
+
+      reason =
+        document
+          .getElementById(
+            'reason'
+          )
+          .value
+          .trim();
+    }
+  }
+
+
+  try{
 
     const data =
-      await lookupStudentJsonp(
-        qr
+      await saveAttendanceJsonp(
+        qr,
+        teacher,
+        selectedStatus,
+        result,
+        reason
       );
 
 
-    if (
-      data &&
-      data.success
-    ) {
-
-      showStudent(
-        data
-      );
-
-
-      addHistory(
-        data
-      );
-
-
-      setStatus(
-        '✓ TÌM THẤY HỌC SINH — CAMERA TIẾP TỤC QUÉT'
-      );
-
-
-      beepSuccess();
-
-    }
-    else {
-
-      const message =
-        data &&
-        data.message
-          ? data.message
-          : 'Không tìm thấy học sinh';
-
-
-      showError(
-        message,
-        qr
-      );
-
-
-      setStatus(
-        '✕ ' +
-        message
-      );
-
-
-      beepError();
-
-    }
-
-  }
-  catch (error) {
-
-    console.error(
-      'JSONP error:',
-      error
-    );
-
-
-    showError(
-      'Không kết nối được Apps Script',
+    handleAttendanceResult(
+      data,
       qr
     );
 
+  }
+  catch(error){
 
-    setStatus(
-      '✕ LỖI KẾT NỐI JSONP: ' +
-      getErrorMessage(error)
+    showError(
+      'Không kết nối được Apps Script'
+    );
+
+
+    setSystemStatus(
+      '✕ LỖI KẾT NỐI: ' +
+      errorMessage(error)
     );
 
 
     beepError();
 
   }
-  finally {
+  finally{
 
     processing =
       false;
-
   }
-
 }
 
 
 /* =========================================================
-   6. TRA HỌC SINH BẰNG JSONP
+   GỌI API GHI ĐIỂM DANH
 ========================================================= */
 
-function lookupStudentJsonp(
-  qr
-) {
+function saveAttendanceJsonp(
+  qr,
+  teacher,
+  status,
+  result,
+  reason
+){
 
   return new Promise(
-    function(resolve, reject) {
+    function(resolve,reject){
 
-      /*
-       * Xóa request cũ nếu có.
-       */
-      clearJsonpRequest();
+      clearJsonp();
 
 
       jsonpResolve =
         resolve;
-
 
       jsonpReject =
         reject;
@@ -636,84 +886,67 @@ function lookupStudentJsonp(
 
 
       script.id =
-        'jsonp-api';
+        'jsonp-attendance';
 
 
-      /*
-       * Nếu trình duyệt không
-       * tải được script.
-       */
       script.onerror =
-        function() {
+        function(){
 
-          const rejectCurrent =
+          const rejectNow =
             jsonpReject;
 
+          clearJsonp();
 
-          clearJsonpRequest();
+          if(rejectNow){
 
-
-          if (
-            rejectCurrent
-          ) {
-
-            rejectCurrent(
+            rejectNow(
               new Error(
                 'Không tải được API Apps Script'
               )
             );
-
           }
-
         };
 
 
-      /*
-       * URL có dạng:
-       *
-       * .../exec
-       * ?page=api-v7-test
-       * &qr=HS-...
-       * &callback=qrStudentCallback
-       */
-      script.src =
+      let url =
         API_URL +
-        '?page=api-v7-test' +
+        '?page=api-v7-save' +
         '&qr=' +
-        encodeURIComponent(
-          qr
-        ) +
+        encodeURIComponent(qr) +
+        '&teacher=' +
+        encodeURIComponent(teacher) +
+        '&status=' +
+        encodeURIComponent(status) +
+        '&result=' +
+        encodeURIComponent(result) +
+        '&reason=' +
+        encodeURIComponent(reason) +
         '&callback=' +
-        JSONP_CALLBACK +
+        CALLBACK_NAME +
         '&t=' +
         Date.now();
 
 
-      /*
-       * Nếu Apps Script không
-       * gọi callback sau 15 giây.
-       */
+      script.src =
+        url;
+
+
       jsonpTimer =
         setTimeout(
-          function() {
+          function(){
 
-            const rejectCurrent =
+            const rejectNow =
               jsonpReject;
 
+            clearJsonp();
 
-            clearJsonpRequest();
+            if(rejectNow){
 
-
-            if (
-              rejectCurrent
-            ) {
-
-              rejectCurrent(
+              rejectNow(
                 new Error(
                   'Apps Script không phản hồi sau 15 giây'
                 )
               );
-
             }
 
           },
@@ -721,26 +954,414 @@ function lookupStudentJsonp(
         );
 
 
-      /*
-       * Gắn script vào trang.
-       */
       document.body.appendChild(
         script
       );
-
     }
   );
-
 }
 
 
 /* =========================================================
-   7. XÓA REQUEST JSONP
+   XỬ LÝ KẾT QUẢ
 ========================================================= */
 
-function clearJsonpRequest() {
+function handleAttendanceResult(
+  data,
+  qr
+){
 
-  if (jsonpTimer) {
+  if(
+    data &&
+    data.success
+  ){
+
+    successCount++;
+
+    updateCounters();
+
+
+    showSuccess(data);
+
+
+    addHistory(data);
+
+
+    setSystemStatus(
+      '✓ ĐÃ GHI ĐIỂM DANH — CAMERA TIẾP TỤC QUÉT'
+    );
+
+
+    beepSuccess();
+
+    return;
+  }
+
+
+  /*
+   * Backend báo trùng.
+   */
+  if(
+    data &&
+    data.duplicate
+  ){
+
+    duplicateCount++;
+
+    updateCounters();
+
+
+    showDuplicate(data);
+
+
+    setSystemStatus(
+      '⚠ QUÉT TRÙNG — KHÔNG GHI THÊM DỮ LIỆU'
+    );
+
+
+    beepDuplicate();
+
+    return;
+  }
+
+
+  const message =
+    data &&
+    data.message
+      ? data.message
+      : 'Không thể ghi điểm danh';
+
+
+  showError(
+    message,
+    qr
+  );
+
+
+  setSystemStatus(
+    '✕ ' + message
+  );
+
+
+  beepError();
+}
+
+
+/* =========================================================
+   HIỂN THỊ THÀNH CÔNG
+========================================================= */
+
+function showSuccess(data){
+
+  const card =
+    document.getElementById(
+      'resultCard'
+    );
+
+
+  card.className =
+    'success';
+
+
+  document.getElementById(
+    'studentName'
+  ).textContent =
+    data.hoTen || '';
+
+
+  document.getElementById(
+    'studentClass'
+  ).textContent =
+    data.lop
+      ? 'LỚP ' + data.lop
+      : '';
+
+
+  document.getElementById(
+    'studentId'
+  ).textContent =
+    'Mã HS: ' +
+    (data.maHS || '');
+
+
+  document.getElementById(
+    'attendanceStatus'
+  ).textContent =
+    'Trạng thái: ' +
+    (data.trangThai || '');
+
+
+  document.getElementById(
+    'attendanceTime'
+  ).textContent =
+    'Thời gian: ' +
+    (data.thoiGian || '');
+
+
+  let note = '';
+
+  if(data.ketQua){
+
+    note +=
+      data.ketQua;
+  }
+
+  if(data.ghiChu){
+
+    note +=
+      (
+        note
+          ? ' — '
+          : ''
+      ) +
+      data.ghiChu;
+  }
+
+
+  document.getElementById(
+    'attendanceNote'
+  ).textContent =
+    note;
+}
+
+
+/* =========================================================
+   HIỂN THỊ TRÙNG
+========================================================= */
+
+function showDuplicate(data){
+
+  const card =
+    document.getElementById(
+      'resultCard'
+    );
+
+
+  card.className =
+    'error';
+
+
+  document.getElementById(
+    'studentName'
+  ).textContent =
+    data.hoTen ||
+    'QUÉT TRÙNG';
+
+
+  document.getElementById(
+    'studentClass'
+  ).textContent =
+    data.lop
+      ? 'LỚP ' + data.lop
+      : '';
+
+
+  document.getElementById(
+    'studentId'
+  ).textContent =
+    data.maHS
+      ? 'Mã HS: ' + data.maHS
+      : '';
+
+
+  document.getElementById(
+    'attendanceStatus'
+  ).textContent =
+    'QR vừa được ghi nhận';
+
+
+  document.getElementById(
+    'attendanceTime'
+  ).textContent =
+    'Không tạo dòng mới';
+
+
+  document.getElementById(
+    'attendanceNote'
+  ).textContent =
+    '';
+}
+
+
+/* =========================================================
+   HIỂN THỊ LỖI
+========================================================= */
+
+function showError(message,qr){
+
+  const card =
+    document.getElementById(
+      'resultCard'
+    );
+
+
+  card.className =
+    'error';
+
+
+  document.getElementById(
+    'studentName'
+  ).textContent =
+    'KHÔNG GHI NHẬN';
+
+
+  document.getElementById(
+    'studentClass'
+  ).textContent =
+    message || '';
+
+
+  document.getElementById(
+    'studentId'
+  ).textContent =
+    qr || '';
+
+
+  document.getElementById(
+    'attendanceStatus'
+  ).textContent =
+    '';
+
+
+  document.getElementById(
+    'attendanceTime'
+  ).textContent =
+    '';
+
+
+  document.getElementById(
+    'attendanceNote'
+  ).textContent =
+    '';
+}
+
+
+/* =========================================================
+   LỊCH SỬ
+========================================================= */
+
+function addHistory(data){
+
+  const body =
+    document.getElementById(
+      'historyBody'
+    );
+
+
+  const row =
+    document.createElement(
+      'tr'
+    );
+
+
+  const values = [
+
+    data.thoiGian || '',
+
+    data.hoTen || '',
+
+    data.lop || '',
+
+    data.trangThai || '',
+
+    data.ketQua ||
+    data.ghiChu ||
+    ''
+
+  ];
+
+
+  values.forEach(
+    function(value){
+
+      const td =
+        document.createElement(
+          'td'
+        );
+
+      td.textContent =
+        value;
+
+      row.appendChild(
+        td
+      );
+    }
+  );
+
+
+  body.insertBefore(
+    row,
+    body.firstChild
+  );
+
+
+  while(
+    body.children.length >
+    20
+  ){
+
+    body.removeChild(
+      body.lastChild
+    );
+  }
+}
+
+
+/* =========================================================
+   TẮT CAMERA
+========================================================= */
+
+async function stopScanner(){
+
+  if(
+    !scanner ||
+    !scannerRunning
+  ){
+
+    setSystemStatus(
+      '● CAMERA ĐÃ TẮT'
+    );
+
+    return;
+  }
+
+
+  try{
+
+    await scanner.stop();
+
+    scanner.clear();
+
+  }
+  catch(error){
+
+    console.warn(error);
+  }
+
+
+  scannerRunning =
+    false;
+
+  processing =
+    false;
+
+
+  clearJsonp();
+
+
+  setSystemStatus(
+    '● CAMERA ĐÃ TẮT'
+  );
+}
+
+
+/* =========================================================
+   XÓA JSONP
+========================================================= */
+
+function clearJsonp(){
+
+  if(jsonpTimer){
 
     clearTimeout(
       jsonpTimer
@@ -753,335 +1374,125 @@ function clearJsonpRequest() {
 
   const oldScript =
     document.getElementById(
-      'jsonp-api'
+      'jsonp-attendance'
     );
 
 
-  if (oldScript) {
+  if(oldScript){
 
     oldScript.remove();
-
   }
 
 
   jsonpResolve =
     null;
 
-
   jsonpReject =
     null;
-
 }
 
 
 /* =========================================================
-   8. HIỂN THỊ HỌC SINH
+   BỘ ĐẾM
 ========================================================= */
 
-function showStudent(
-  student
-) {
+function updateCounters(){
 
-  const card =
-    document.getElementById(
-      'studentCard'
-    );
-
-
-  card.className =
-    'student-card success';
+  document.getElementById(
+    'successCount'
+  ).textContent =
+    successCount;
 
 
   document.getElementById(
-    'studentName'
+    'duplicateCount'
   ).textContent =
-    student.hoTen || '';
-
-
-  document.getElementById(
-    'studentClass'
-  ).textContent =
-    student.lop
-      ? 'LỚP ' +
-        student.lop
-      : '';
-
-
-  document.getElementById(
-    'studentId'
-  ).textContent =
-    'Mã HS: ' +
-    (
-      student.maHS || ''
-    );
-
-
-  document.getElementById(
-    'studentStatus'
-  ).textContent =
-    'Trạng thái: ' +
-    (
-      student.trangThai || ''
-    );
-
-
-  document.getElementById(
-    'studentQr'
-  ).textContent =
-    student.maQR || '';
-
+    duplicateCount;
 }
 
 
 /* =========================================================
-   9. HIỂN THỊ LỖI
+   NGƯỜI ĐIỂM DANH
 ========================================================= */
 
-function showError(
-  message,
-  qr
-) {
+function getTeacher(){
 
-  const card =
-    document.getElementById(
-      'studentCard'
-    );
-
-
-  card.className =
-    'student-card error';
-
-
-  document.getElementById(
-    'studentName'
-  ).textContent =
-    'KHÔNG TÌM THẤY';
-
-
-  document.getElementById(
-    'studentClass'
-  ).textContent =
-    message || '';
-
-
-  document.getElementById(
-    'studentId'
-  ).textContent =
-    '';
-
-
-  document.getElementById(
-    'studentStatus'
-  ).textContent =
-    '';
-
-
-  document.getElementById(
-    'studentQr'
-  ).textContent =
-    qr || '';
-
+  return document
+    .getElementById(
+      'teacher'
+    )
+    .value
+    .trim();
 }
 
 
 /* =========================================================
-   10. LỊCH SỬ TRA CỨU
+   QR
 ========================================================= */
 
-function addHistory(
-  student
-) {
-
-  const list =
-    document.getElementById(
-      'historyList'
-    );
-
-
-  const item =
-    document.createElement(
-      'li'
-    );
-
-
-  const time =
-    new Date()
-      .toLocaleTimeString(
-        'vi-VN'
-      );
-
-
-  item.textContent =
-    time +
-    ' — ' +
-    student.hoTen +
-    ' — ' +
-    student.lop +
-    ' — ' +
-    student.maHS;
-
-
-  list.insertBefore(
-    item,
-    list.firstChild
-  );
-
-
-  /*
-   * Chỉ giữ 10 lượt gần nhất.
-   */
-  while (
-    list.children.length >
-    10
-  ) {
-
-    list.removeChild(
-      list.lastChild
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   11. TẮT CAMERA
-========================================================= */
-
-async function stopScanner() {
-
-  if (
-    !scanner ||
-    !scannerRunning
-  ) {
-
-    setStatus(
-      '● CAMERA ĐÃ TẮT'
-    );
-
-    return;
-  }
-
-
-  try {
-
-    await scanner.stop();
-
-
-    scanner.clear();
-
-  }
-  catch (error) {
-
-    console.warn(
-      'Stop camera:',
-      error
-    );
-
-  }
-
-
-  scannerRunning =
-    false;
-
-
-  processing =
-    false;
-
-
-  clearJsonpRequest();
-
-
-  setStatus(
-    '● CAMERA ĐÃ TẮT'
-  );
-
-}
-
-
-/* =========================================================
-   12. CHUẨN HÓA QR
-========================================================= */
-
-function normalizeQr(
-  value
-) {
+function normalizeQr(value){
 
   return String(
     value || ''
   )
-  .replace(
-    /\u0000/g,
-    ''
-  )
-  .replace(
-    /\r/g,
-    ''
-  )
-  .replace(
-    /\n/g,
-    ''
-  )
+  .replace(/\u0000/g,'')
+  .replace(/\r/g,'')
+  .replace(/\n/g,'')
   .trim()
   .toUpperCase();
-
 }
 
 
 /* =========================================================
-   13. HIỂN THỊ TRẠNG THÁI
+   STATUS
 ========================================================= */
 
-function setStatus(
-  text
-) {
+function setSystemStatus(text){
 
   document.getElementById(
-    'status'
+    'systemStatus'
   ).textContent =
     text;
-
 }
 
 
 /* =========================================================
-   14. ÂM THANH THÀNH CÔNG
+   ÂM THANH
 ========================================================= */
 
-function beepSuccess() {
+function beepSuccess(){
 
   beep(
     1050,
     120
   );
-
 }
 
 
-/* =========================================================
-   15. ÂM THANH LỖI
-========================================================= */
+function beepDuplicate(){
 
-function beepError() {
+  beep(
+    650,
+    180
+  );
+}
+
+
+function beepError(){
 
   beep(
     350,
     300
   );
-
 }
 
-
-/* =========================================================
-   16. TẠO ÂM THANH
-========================================================= */
 
 function beep(
   frequency,
   duration
-) {
+){
 
-  try {
+  try{
 
     const AudioContext =
       window.AudioContext ||
@@ -1122,7 +1533,7 @@ function beep(
 
 
     setTimeout(
-      function() {
+      function(){
 
         oscillator.stop();
 
@@ -1133,45 +1544,53 @@ function beep(
     );
 
   }
-  catch (error) {
-
-    /*
-     * Nếu trình duyệt chặn âm thanh,
-     * hệ thống vẫn tiếp tục hoạt động.
-     */
-
+  catch(error){
   }
-
 }
 
 
 /* =========================================================
-   17. LẤY THÔNG BÁO LỖI
+   ERROR
 ========================================================= */
 
-function getErrorMessage(
-  error
-) {
+function errorMessage(error){
 
-  if (!error) {
-
+  if(!error){
     return 'Không xác định';
-
   }
 
-
-  if (error.message) {
-
-    return error.message;
-
-  }
-
-
-  return String(
-    error
-  );
-
+  return error.message ||
+    String(error);
 }
+
+
+/* =========================================================
+   KHỞI TẠO
+========================================================= */
+
+window.addEventListener(
+  'load',
+  function(){
+
+    /*
+     * Khôi phục người điểm danh
+     * đã dùng lần trước.
+     */
+    const savedTeacher =
+      localStorage.getItem(
+        'qr_teacher'
+      );
+
+
+    if(savedTeacher){
+
+      document.getElementById(
+        'teacher'
+      ).value =
+        savedTeacher;
+    }
+  }
+);
 
 </script>
 

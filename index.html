@@ -2,157 +2,154 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0">
-
-  <title>QR Điểm danh V7.2</title>
+  <title>QR Điểm danh V7.3</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
   <style>
-    *{
-      box-sizing:border-box;
+    * {
+      box-sizing: border-box;
     }
 
-    body{
-      margin:0;
-      padding:20px;
-      font-family:Arial,sans-serif;
-      background:#f2f6f8;
-      color:#17324d;
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f2f6f8;
+      color: #17324d;
     }
 
-    .box{
-      max-width:760px;
-      margin:auto;
-      padding:22px;
-      background:#fff;
-      border-radius:18px;
-      box-shadow:0 8px 30px rgba(0,0,0,.08);
+    .box {
+      max-width: 760px;
+      margin: auto;
+      padding: 22px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.08);
     }
 
-    h1{
-      margin:0 0 8px;
-      text-align:center;
-      color:#168672;
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      color: #168672;
     }
 
-    .subtitle{
-      margin-bottom:20px;
-      text-align:center;
-      color:#6b7d8d;
+    .subtitle {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #6b7d8d;
     }
 
-    #reader{
-      width:100%;
-      overflow:hidden;
-      border-radius:14px;
+    #reader {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 14px;
     }
 
-    button{
-      width:100%;
-      margin-top:10px;
-      padding:15px;
-      border:0;
-      border-radius:10px;
-      font-size:16px;
-      font-weight:bold;
-      cursor:pointer;
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .start{
-      background:#168672;
-      color:#fff;
+    .start {
+      background: #168672;
+      color: white;
     }
 
-    .stop{
-      background:#cf3b2d;
-      color:#fff;
+    .stop {
+      background: #cf3b2d;
+      color: white;
     }
 
-    #status{
-      margin-top:15px;
-      padding:14px;
-      border-radius:10px;
-      text-align:center;
-      background:#eaf8f4;
-      color:#086247;
-      font-weight:bold;
-      line-height:1.5;
+    #status {
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      background: #eaf8f4;
+      color: #086247;
+      font-weight: bold;
+      line-height: 1.5;
     }
 
-    .student{
-      display:none;
-      margin-top:18px;
-      padding:20px;
-      border:2px solid #d9e5e9;
-      border-radius:15px;
-      text-align:center;
+    .student {
+      display: none;
+      margin-top: 18px;
+      padding: 20px;
+      border: 2px solid #d9e5e9;
+      border-radius: 15px;
+      text-align: center;
     }
 
-    .student.success{
-      display:block;
-      border-color:#99d8c8;
-      background:#f2fbf8;
+    .student.success {
+      display: block;
+      border-color: #99d8c8;
+      background: #f2fbf8;
     }
 
-    .student.error{
-      display:block;
-      border-color:#efb1aa;
-      background:#fff4f2;
+    .student.error {
+      display: block;
+      border-color: #efb1aa;
+      background: #fff4f2;
     }
 
-    .name{
-      margin-bottom:8px;
-      font-size:28px;
-      font-weight:900;
-      color:#168672;
+    .name {
+      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 900;
+      color: #168672;
     }
 
-    .class{
-      margin-bottom:14px;
-      font-size:21px;
-      font-weight:bold;
+    .class {
+      margin-bottom: 14px;
+      font-size: 21px;
+      font-weight: bold;
     }
 
-    .info{
-      margin:5px 0;
-      font-size:16px;
+    .info {
+      margin: 5px 0;
+      font-size: 16px;
     }
 
-    .qr{
-      margin-top:10px;
-      color:#687985;
-      font-family:monospace;
-      word-break:break-all;
+    .qr {
+      margin-top: 10px;
+      color: #687985;
+      font-family: monospace;
+      word-break: break-all;
     }
 
-    .history{
-      margin-top:20px;
+    .history {
+      margin-top: 20px;
     }
 
-    .history h3{
-      margin-bottom:10px;
+    .history h3 {
+      margin-bottom: 10px;
     }
 
-    #historyList{
-      margin:0;
-      padding:0;
-      list-style:none;
+    #historyList {
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    #historyList li{
-      margin-bottom:7px;
-      padding:11px;
-      border-radius:9px;
-      background:#f5f8fa;
-      line-height:1.5;
+    #historyList li {
+      margin-bottom: 7px;
+      padding: 11px;
+      border-radius: 9px;
+      background: #f5f8fa;
+      line-height: 1.5;
     }
 
-    .checking{
-      opacity:.65;
+    .checking {
+      opacity: .65;
     }
   </style>
 </head>
@@ -161,23 +158,19 @@
 
 <div class="box">
 
-  <h1>QR ĐIỂM DANH V7.2</h1>
+  <h1>QR ĐIỂM DANH V7.3</h1>
 
   <div class="subtitle">
-    Kiểm tra kết nối dữ liệu học sinh
+    Camera → QR → Apps Script → HOC_SINH
   </div>
 
   <div id="reader"></div>
 
-  <button
-    class="start"
-    onclick="startScanner()">
+  <button class="start" onclick="startScanner()">
     BẬT CAMERA QUÉT QR
   </button>
 
-  <button
-    class="stop"
-    onclick="stopScanner()">
+  <button class="stop" onclick="stopScanner()">
     TẮT CAMERA
   </button>
 
@@ -185,34 +178,17 @@
     ● SẴN SÀNG
   </div>
 
-  <div
-    id="studentBox"
-    class="student">
+  <div id="studentBox" class="student">
 
-    <div
-      id="studentName"
-      class="name">
-    </div>
+    <div id="studentName" class="name"></div>
 
-    <div
-      id="studentClass"
-      class="class">
-    </div>
+    <div id="studentClass" class="class"></div>
 
-    <div
-      id="studentId"
-      class="info">
-    </div>
+    <div id="studentId" class="info"></div>
 
-    <div
-      id="studentStatus"
-      class="info">
-    </div>
+    <div id="studentStatus" class="info"></div>
 
-    <div
-      id="studentQr"
-      class="qr">
-    </div>
+    <div id="studentQr" class="qr"></div>
 
   </div>
 
@@ -226,11 +202,10 @@
 
 </div>
 
-
 <script>
 
 /* ==========================================================
-   APPS SCRIPT API
+   APPS SCRIPT WEB APP
 ========================================================== */
 
 const API_URL =
@@ -238,17 +213,14 @@ const API_URL =
 
 
 /* ==========================================================
-   SCANNER
+   BIẾN HỆ THỐNG
 ========================================================== */
 
 let scanner = null;
-
 let running = false;
-
 let processing = false;
 
 let lastQr = '';
-
 let lastQrTime = 0;
 
 const SAME_QR_LOCK = 3000;
@@ -258,59 +230,46 @@ const SAME_QR_LOCK = 3000;
    BẬT CAMERA
 ========================================================== */
 
-async function startScanner(){
+async function startScanner() {
 
-  if(running){
+  if (running) {
     return;
   }
 
-  setStatus(
-    '● ĐANG MỞ CAMERA...'
-  );
+  setStatus('● ĐANG MỞ CAMERA...');
 
-  try{
+  try {
 
-    scanner =
-      new Html5Qrcode(
-        'reader'
-      );
+    scanner = new Html5Qrcode('reader');
 
     await scanner.start(
 
       {
-        facingMode:'environment'
+        facingMode: 'environment'
       },
 
       {
-        fps:10,
+        fps: 10,
 
-        qrbox:function(
-          width,
-          height
-        ){
+        qrbox: function(width, height) {
 
           const size =
             Math.floor(
-              Math.min(
-                width,
-                height
-              ) * 0.70
+              Math.min(width, height) * 0.70
             );
 
           return {
-            width:size,
-            height:size
+            width: size,
+            height: size
           };
-
         }
       },
 
       onQrRead,
 
-      function(){
-        // Frame chưa nhận QR.
+      function() {
+        // Chưa đọc được QR ở frame hiện tại.
       }
-
     );
 
     running = true;
@@ -320,7 +279,7 @@ async function startScanner(){
     );
 
   }
-  catch(error){
+  catch (error) {
 
     console.error(error);
 
@@ -328,76 +287,53 @@ async function startScanner(){
       '✕ KHÔNG MỞ ĐƯỢC CAMERA: ' +
       getErrorMessage(error)
     );
-
   }
-
 }
 
 
 /* ==========================================================
-   KHI ĐỌC ĐƯỢC QR
+   KHI CAMERA ĐỌC ĐƯỢC QR
 ========================================================== */
 
-async function onQrRead(decodedText){
+async function onQrRead(decodedText) {
 
-  const qr =
-    normalizeQr(
-      decodedText
-    );
+  const qr = normalizeQr(decodedText);
 
-  if(!qr){
+  if (!qr) {
     return;
   }
 
 
-  /*
-   * Chỉ nhận mã QR học sinh.
-   */
-  if(
-    !/^HS-[A-Z0-9]+$/i.test(qr)
-  ){
+  if (!/^HS-[A-Z0-9]+$/i.test(qr)) {
 
     setStatus(
       '⚠ QR KHÔNG PHẢI MÃ HỌC SINH'
     );
 
     return;
-
   }
 
 
-  const now =
-    Date.now();
+  const now = Date.now();
 
 
-  /*
-   * QR đang xử lý thì không gửi lại.
-   */
-  if(processing){
+  if (processing) {
     return;
   }
 
 
-  /*
-   * Chống đọc liên tục cùng một QR.
-   */
-  if(
+  if (
     qr === lastQr &&
-    now - lastQrTime <
-      SAME_QR_LOCK
-  ){
+    now - lastQrTime < SAME_QR_LOCK
+  ) {
     return;
   }
 
 
-  lastQr =
-    qr;
+  lastQr = qr;
+  lastQrTime = now;
 
-  lastQrTime =
-    now;
-
-  processing =
-    true;
+  processing = true;
 
 
   setStatus(
@@ -412,29 +348,28 @@ async function onQrRead(decodedText){
       'studentBox'
     );
 
-  box.classList.add(
-    'checking'
-  );
+  box.classList.add('checking');
 
 
-  try{
+  try {
 
+    /*
+     * QUAN TRỌNG:
+     * V7.3 sử dụng JSONP.
+     * Không sử dụng fetch().
+     */
     const student =
-      await lookupStudent(qr);
+      await lookupStudentJsonp(qr);
 
 
-    if(
+    if (
       student &&
       student.success
-    ){
+    ) {
 
-      showStudent(
-        student
-      );
+      showStudent(student);
 
-      addHistory(
-        student
-      );
+      addHistory(student);
 
       setStatus(
         '✓ TÌM THẤY HỌC SINH — CAMERA TIẾP TỤC QUÉT'
@@ -443,122 +378,187 @@ async function onQrRead(decodedText){
       beepSuccess();
 
     }
-    else{
+    else {
 
-      showError(
+      const message =
         student &&
         student.message
           ? student.message
-          : 'Không tìm thấy học sinh',
+          : 'Không tìm thấy học sinh';
+
+
+      showError(
+        message,
         qr
       );
 
+
       setStatus(
-        '✕ ' +
-        (
-          student &&
-          student.message
-            ? student.message
-            : 'Không tìm thấy học sinh'
-        )
+        '✕ ' + message
       );
 
-      beepError();
 
+      beepError();
     }
 
   }
-  catch(error){
+  catch (error) {
 
     console.error(error);
+
 
     showError(
       'Không kết nối được Apps Script',
       qr
     );
 
+
     setStatus(
-      '✕ LỖI KẾT NỐI API: ' +
+      '✕ LỖI KẾT NỐI JSONP: ' +
       getErrorMessage(error)
     );
+
 
     beepError();
 
   }
-  finally{
+  finally {
 
     box.classList.remove(
       'checking'
     );
 
-    processing =
-      false;
-
+    processing = false;
   }
-
 }
 
 
 /* ==========================================================
-   GỌI APPS SCRIPT
+   JSONP
+   GitHub Pages → Apps Script
 ========================================================== */
 
-async function lookupStudent(qr){
+function lookupStudentJsonp(qr) {
 
-  const url =
-    API_URL +
-    '?page=api-v7-test' +
-    '&qr=' +
-    encodeURIComponent(qr) +
-    '&_=' +
-    Date.now();
+  return new Promise(
+    function(resolve, reject) {
+
+      const callbackName =
+        '__qrCallback_' +
+        Date.now() +
+        '_' +
+        Math.random()
+          .toString(36)
+          .slice(2);
 
 
-  const response =
-    await fetch(
-      url,
-      {
-        method:'GET',
-        cache:'no-store',
-        redirect:'follow'
+      const script =
+        document.createElement(
+          'script'
+        );
+
+
+      let finished = false;
+
+
+      const timer =
+        setTimeout(
+          function() {
+
+            if (finished) {
+              return;
+            }
+
+            finished = true;
+
+            cleanup();
+
+            reject(
+              new Error(
+                'Apps Script không phản hồi sau 10 giây'
+              )
+            );
+
+          },
+          10000
+        );
+
+
+      function cleanup() {
+
+        clearTimeout(timer);
+
+        try {
+          delete window[callbackName];
+        }
+        catch (error) {
+          window[callbackName] = undefined;
+        }
+
+        if (
+          script &&
+          script.parentNode
+        ) {
+          script.parentNode.removeChild(
+            script
+          );
+        }
       }
-    );
 
 
-  if(!response.ok){
+      window[callbackName] =
+        function(data) {
 
-    throw new Error(
-      'HTTP ' +
-      response.status
-    );
+          if (finished) {
+            return;
+          }
 
-  }
+          finished = true;
+
+          cleanup();
+
+          resolve(data);
+        };
 
 
-  const text =
-    await response.text();
+      script.onerror =
+        function() {
+
+          if (finished) {
+            return;
+          }
+
+          finished = true;
+
+          cleanup();
+
+          reject(
+            new Error(
+              'Không tải được API Apps Script'
+            )
+          );
+        };
 
 
-  try{
+      script.src =
+        API_URL +
+        '?page=api-v7-test' +
+        '&qr=' +
+        encodeURIComponent(qr) +
+        '&callback=' +
+        encodeURIComponent(
+          callbackName
+        ) +
+        '&_=' +
+        Date.now();
 
-    return JSON.parse(
-      text
-    );
 
-  }
-  catch(error){
+      document.head.appendChild(
+        script
+      );
 
-    console.error(
-      'API response:',
-      text
-    );
-
-    throw new Error(
-      'Apps Script không trả về JSON hợp lệ'
-    );
-
-  }
-
+    }
+  );
 }
 
 
@@ -566,7 +566,7 @@ async function lookupStudent(qr){
    HIỂN THỊ HỌC SINH
 ========================================================== */
 
-function showStudent(student){
+function showStudent(student) {
 
   const box =
     document.getElementById(
@@ -596,25 +596,20 @@ function showStudent(student){
     'studentId'
   ).textContent =
     'Mã HS: ' +
-    (
-      student.maHS || ''
-    );
+    (student.maHS || '');
 
 
   document.getElementById(
     'studentStatus'
   ).textContent =
     'Trạng thái: ' +
-    (
-      student.trangThai || ''
-    );
+    (student.trangThai || '');
 
 
   document.getElementById(
     'studentQr'
   ).textContent =
     student.maQR || '';
-
 }
 
 
@@ -622,10 +617,7 @@ function showStudent(student){
    HIỂN THỊ LỖI
 ========================================================== */
 
-function showError(
-  message,
-  qr
-){
+function showError(message, qr) {
 
   const box =
     document.getElementById(
@@ -651,29 +643,26 @@ function showError(
 
   document.getElementById(
     'studentId'
-  ).textContent =
-    '';
+  ).textContent = '';
 
 
   document.getElementById(
     'studentStatus'
-  ).textContent =
-    '';
+  ).textContent = '';
 
 
   document.getElementById(
     'studentQr'
   ).textContent =
     qr || '';
-
 }
 
 
 /* ==========================================================
-   LỊCH SỬ
+   LỊCH SỬ TRA CỨU
 ========================================================== */
 
-function addHistory(student){
+function addHistory(student) {
 
   const list =
     document.getElementById(
@@ -710,16 +699,14 @@ function addHistory(student){
   );
 
 
-  while(
+  while (
     list.children.length > 10
-  ){
+  ) {
 
     list.removeChild(
       list.lastChild
     );
-
   }
-
 }
 
 
@@ -727,44 +714,36 @@ function addHistory(student){
    TẮT CAMERA
 ========================================================== */
 
-async function stopScanner(){
+async function stopScanner() {
 
-  if(
+  if (
     !scanner ||
     !running
-  ){
+  ) {
     return;
   }
 
 
-  try{
+  try {
 
     await scanner.stop();
 
     scanner.clear();
 
   }
-  catch(error){
+  catch (error) {
 
-    console.warn(
-      error
-    );
-
+    console.warn(error);
   }
 
 
-  running =
-    false;
-
-
-  processing =
-    false;
+  running = false;
+  processing = false;
 
 
   setStatus(
     '● CAMERA ĐÃ TẮT'
   );
-
 }
 
 
@@ -772,26 +751,16 @@ async function stopScanner(){
    CHUẨN HÓA QR
 ========================================================== */
 
-function normalizeQr(value){
+function normalizeQr(value) {
 
   return String(
     value || ''
   )
-  .replace(
-    /\u0000/g,
-    ''
-  )
-  .replace(
-    /\r/g,
-    ''
-  )
-  .replace(
-    /\n/g,
-    ''
-  )
+  .replace(/\u0000/g, '')
+  .replace(/\r/g, '')
+  .replace(/\n/g, '')
   .trim()
   .toUpperCase();
-
 }
 
 
@@ -799,54 +768,39 @@ function normalizeQr(value){
    STATUS
 ========================================================== */
 
-function setStatus(text){
+function setStatus(text) {
 
   document.getElementById(
     'status'
-  ).textContent =
-    text;
-
+  ).textContent = text;
 }
 
 
 /* ==========================================================
-   ÂM THANH THÀNH CÔNG
+   ÂM THANH
 ========================================================== */
 
-function beepSuccess(){
+function beepSuccess() {
 
   beep(
     1050,
     120
   );
-
 }
 
 
-/* ==========================================================
-   ÂM THANH LỖI
-========================================================== */
-
-function beepError(){
+function beepError() {
 
   beep(
     350,
     300
   );
-
 }
 
 
-/* ==========================================================
-   BEEP
-========================================================== */
+function beep(frequency, duration) {
 
-function beep(
-  frequency,
-  duration
-){
-
-  try{
+  try {
 
     const AudioContext =
       window.AudioContext ||
@@ -869,25 +823,21 @@ function beep(
       frequency;
 
 
-    oscillator.connect(
-      gain
-    );
-
+    oscillator.connect(gain);
 
     gain.connect(
       ctx.destination
     );
 
 
-    gain.gain.value =
-      0.12;
+    gain.gain.value = 0.12;
 
 
     oscillator.start();
 
 
     setTimeout(
-      function(){
+      function() {
 
         oscillator.stop();
 
@@ -898,33 +848,27 @@ function beep(
     );
 
   }
-  catch(error){
-    // Không ảnh hưởng chức năng chính.
+  catch (error) {
+    // Âm thanh không ảnh hưởng chức năng chính.
   }
-
 }
 
 
 /* ==========================================================
-   ERROR MESSAGE
+   ERROR
 ========================================================== */
 
-function getErrorMessage(error){
+function getErrorMessage(error) {
 
-  if(!error){
+  if (!error) {
     return 'Không xác định';
   }
 
-
-  if(error.message){
+  if (error.message) {
     return error.message;
   }
 
-
-  return String(
-    error
-  );
-
+  return String(error);
 }
 
 </script>

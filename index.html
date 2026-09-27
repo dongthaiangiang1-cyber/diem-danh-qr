@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>QR Điểm danh V7.5</title>
+  <title>QR Điểm danh V7.5.1</title>
 
   <script src="https://unpkg.com/html5-qrcode"></script>
 
@@ -253,7 +253,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
-      min-width: 820px;
+      min-width: 850px;
     }
 
     th,
@@ -270,7 +270,7 @@
     }
 
     td.reason {
-      max-width: 230px;
+      max-width: 240px;
       word-break: break-word;
     }
 
@@ -317,19 +317,27 @@
 <div class="container">
 
   <div class="header">
-    <span class="version">V7.5</span>
 
-    <h1>QR ĐIỂM DANH HỌC SINH</h1>
+    <span class="version">
+      V7.5.1
+    </span>
+
+    <h1>
+      QR ĐIỂM DANH HỌC SINH
+    </h1>
 
     <p>
       Quét liên tục • Tự động ghi nhận • Camera không tắt sau mỗi lượt
     </p>
+
   </div>
 
 
   <div class="card">
 
-    <label>Người điểm danh</label>
+    <label>
+      Người điểm danh
+    </label>
 
     <input
       id="teacher"
@@ -339,7 +347,9 @@
     >
 
 
-    <label>Trạng thái</label>
+    <label>
+      Trạng thái
+    </label>
 
     <div class="status-grid">
 
@@ -367,17 +377,16 @@
     </div>
 
 
-    <!-- ==================================================
-         RA KHỎI TRƯỜNG
-    =================================================== -->
+    <!-- RA KHỎI TRƯỜNG -->
 
     <div id="exitOptions">
 
-      <label>Lý do ra khỏi trường</label>
+      <label>
+        Lý do ra khỏi trường
+      </label>
 
       <div class="helper">
-        Mặc định là <b>Về nghỉ</b>. Nếu học sinh chỉ xin ra ngoài
-        và sẽ quay lại trường, chọn lựa chọn tương ứng.
+        Mặc định là <b>Về nghỉ</b>.
       </div>
 
       <div class="exit-grid">
@@ -409,7 +418,9 @@
 
       <div id="exitReasonBox">
 
-        <label>Nhập lý do khác</label>
+        <label>
+          Nhập lý do khác
+        </label>
 
         <input
           id="exitReason"
@@ -422,13 +433,13 @@
     </div>
 
 
-    <!-- ==================================================
-         VÀO HỌC
-    =================================================== -->
+    <!-- VÀO HỌC -->
 
     <div id="studyOptions">
 
-      <label>Kết quả vào học</label>
+      <label>
+        Kết quả vào học
+      </label>
 
       <div class="result-grid">
 
@@ -451,7 +462,9 @@
 
       <div id="studyReasonBox">
 
-        <label>Lý do không vào lớp</label>
+        <label>
+          Lý do không vào lớp
+        </label>
 
         <input
           id="studyReason"
@@ -464,11 +477,11 @@
     </div>
 
 
-    <!-- ==================================================
-         CAMERA
-    =================================================== -->
+    <!-- CAMERA -->
 
-    <label>Camera quét QR</label>
+    <label>
+      Camera quét QR
+    </label>
 
     <div id="reader"></div>
 
@@ -497,9 +510,7 @@
     </div>
 
 
-    <!-- ==================================================
-         KẾT QUẢ
-    =================================================== -->
+    <!-- KẾT QUẢ -->
 
     <div id="resultCard">
 
@@ -541,7 +552,9 @@
           0
         </div>
 
-        <div>THÀNH CÔNG</div>
+        <div>
+          THÀNH CÔNG
+        </div>
 
       </div>
 
@@ -555,7 +568,9 @@
           0
         </div>
 
-        <div>QUÉT TRÙNG</div>
+        <div>
+          QUÉT TRÙNG
+        </div>
 
       </div>
 
@@ -564,19 +579,20 @@
   </div>
 
 
-  <!-- ====================================================
-       LỊCH SỬ
-  ===================================================== -->
+  <!-- LỊCH SỬ -->
 
   <div class="card">
 
-    <h3>Lượt quét gần đây</h3>
+    <h3>
+      Lượt quét gần đây
+    </h3>
 
     <div class="table-wrap">
 
       <table>
 
         <thead>
+
           <tr>
             <th>Thời gian</th>
             <th>Học sinh</th>
@@ -585,6 +601,7 @@
             <th>Kết quả</th>
             <th>Lý do</th>
           </tr>
+
         </thead>
 
         <tbody id="historyBody"></tbody>
@@ -597,7 +614,7 @@
 
 
   <div class="note">
-    V7.5 • GitHub Pages + Apps Script • Dữ liệu lưu vào sheet DiemDanh
+    V7.5.1 • GitHub Pages + Apps Script • Dữ liệu lưu vào sheet DiemDanh
   </div>
 
 </div>
@@ -606,7 +623,7 @@
 <script>
 
 /* =========================================================
-   1. CẤU HÌNH
+   CẤU HÌNH
 ========================================================= */
 
 const API_URL =
@@ -623,7 +640,7 @@ const SAME_QR_LOCK =
 
 
 /* =========================================================
-   2. BIẾN HỆ THỐNG
+   BIẾN
 ========================================================= */
 
 let scanner = null;
@@ -657,7 +674,7 @@ let jsonpTimer = null;
 
 
 /* =========================================================
-   3. JSONP CALLBACK
+   JSONP CALLBACK
 ========================================================= */
 
 window.qrAttendanceCallback =
@@ -677,7 +694,7 @@ window.qrAttendanceCallback =
 
 
 /* =========================================================
-   4. CHỌN TRẠNG THÁI
+   CHỌN TRẠNG THÁI
 ========================================================= */
 
 function selectStatus(
@@ -746,7 +763,7 @@ function selectStatus(
 
 
 /* =========================================================
-   5. CHỌN KẾT QUẢ VÀO HỌC
+   CHỌN KẾT QUẢ VÀO HỌC
 ========================================================= */
 
 function selectStudyResult(
@@ -798,7 +815,7 @@ function selectStudyResult(
 
 
 /* =========================================================
-   6. CHỌN LÝ DO RA KHỎI TRƯỜNG
+   CHỌN LÝ DO RA KHỎI TRƯỜNG
 ========================================================= */
 
 function selectExitResult(
@@ -840,6 +857,7 @@ function selectExitResult(
     reasonBox.style.display =
       'block';
 
+
     setTimeout(function() {
 
       document
@@ -860,7 +878,7 @@ function selectExitResult(
 
 
 /* =========================================================
-   7. BẬT CAMERA
+   BẬT CAMERA
 ========================================================= */
 
 async function startScanner() {
@@ -880,9 +898,13 @@ async function startScanner() {
       'Vui lòng nhập người điểm danh trước khi bật camera.'
     );
 
+
     document
-      .getElementById('teacher')
+      .getElementById(
+        'teacher'
+      )
       .focus();
+
 
     return;
   }
@@ -934,6 +956,7 @@ async function startScanner() {
                 ) * 0.70
               );
 
+
             return {
               width: size,
               height: size
@@ -944,7 +967,7 @@ async function startScanner() {
       onQrRead,
 
       function() {
-        // Không có QR ở frame hiện tại.
+        // Không có QR trong frame hiện tại.
       }
     );
 
@@ -962,6 +985,7 @@ async function startScanner() {
     scannerRunning =
       false;
 
+
     setSystemStatus(
       '✕ KHÔNG MỞ ĐƯỢC CAMERA: ' +
       errorMessage(error)
@@ -972,7 +996,7 @@ async function startScanner() {
 
 
 /* =========================================================
-   8. ĐỌC QR
+   ĐỌC QR
 ========================================================= */
 
 async function onQrRead(
@@ -988,6 +1012,7 @@ async function onQrRead(
   if (
     !/^HS-[A-Z0-9]+$/.test(qr)
   ) {
+
     return;
   }
 
@@ -1006,6 +1031,7 @@ async function onQrRead(
     now - lastQrTime <
       SAME_QR_LOCK
   ) {
+
     return;
   }
 
@@ -1026,17 +1052,14 @@ async function onQrRead(
   }
 
 
-  /*
-   * Xác định Kết quả + Lý do
-   */
   let result = '';
 
   let reason = '';
 
 
-  /* -------------------------
+  /* ==========================
      VÀO HỌC
-  ------------------------- */
+  ========================== */
 
   if (
     selectedStatus ===
@@ -1063,14 +1086,23 @@ async function onQrRead(
   }
 
 
-  /* -------------------------
+  /* ==========================
      RA KHỎI TRƯỜNG
-  ------------------------- */
+  ========================== */
 
   if (
     selectedStatus ===
     'Ra khỏi trường'
   ) {
+
+    /*
+     * Backend V7.5.1 sẽ chuyển:
+     *
+     * result = Về nghỉ
+     * thành:
+     * KetQua = Ra khỏi trường
+     * GhiChu = Về nghỉ
+     */
 
     result =
       selectedExitResult;
@@ -1090,16 +1122,12 @@ async function onQrRead(
           .trim();
 
 
-      /*
-       * V7.5:
-       * Lý do khác bắt buộc phải nhập.
-       * Không gửi API nếu đang để trống.
-       */
       if (!reason) {
 
         setSystemStatus(
           '⚠ VUI LÒNG NHẬP LÝ DO RA KHỎI TRƯỜNG'
         );
+
 
         document
           .getElementById(
@@ -1107,17 +1135,16 @@ async function onQrRead(
           )
           .focus();
 
+
         beepError();
 
-        /*
-         * Khóa QR ngắn để camera không gọi
-         * liên tục khi QR vẫn đang trước camera.
-         */
+
         lastQr =
           qr;
 
         lastQrTime =
           now;
+
 
         return;
       }
@@ -1183,7 +1210,7 @@ async function onQrRead(
 
 
 /* =========================================================
-   9. API JSONP
+   GỌI API JSONP
 ========================================================= */
 
 function saveAttendanceJsonp(
@@ -1226,7 +1253,9 @@ function saveAttendanceJsonp(
           const rejectNow =
             jsonpReject;
 
+
           clearJsonp();
+
 
           if (rejectNow) {
 
@@ -1274,7 +1303,9 @@ function saveAttendanceJsonp(
             const rejectNow =
               jsonpReject;
 
+
             clearJsonp();
+
 
             if (rejectNow) {
 
@@ -1301,7 +1332,7 @@ function saveAttendanceJsonp(
 
 
 /* =========================================================
-   10. XỬ LÝ KẾT QUẢ API
+   XỬ LÝ KẾT QUẢ
 ========================================================= */
 
 function handleAttendanceResult(
@@ -1316,21 +1347,27 @@ function handleAttendanceResult(
 
     successCount++;
 
+
     updateCounters();
+
 
     showSuccess(
       data
     );
 
+
     addHistory(
       data
     );
+
 
     setSystemStatus(
       '✓ ĐÃ GHI ĐIỂM DANH — CAMERA TIẾP TỤC QUÉT'
     );
 
+
     beepSuccess();
+
 
     return;
   }
@@ -1343,17 +1380,22 @@ function handleAttendanceResult(
 
     duplicateCount++;
 
+
     updateCounters();
+
 
     showDuplicate(
       data
     );
 
+
     setSystemStatus(
       '⚠ QUÉT TRÙNG — KHÔNG GHI THÊM DỮ LIỆU'
     );
 
+
     beepDuplicate();
+
 
     return;
   }
@@ -1383,7 +1425,7 @@ function handleAttendanceResult(
 
 
 /* =========================================================
-   11. HIỂN THỊ THÀNH CÔNG
+   HIỂN THỊ THÀNH CÔNG
 ========================================================= */
 
 function showSuccess(
@@ -1438,60 +1480,66 @@ function showSuccess(
   let note = '';
 
 
-  /*
-   * RA KHỎI TRƯỜNG
-   */
+  /* ==========================
+     VÀO TRƯỜNG
+  ========================== */
+
   if (
+    data.trangThai ===
+    'Vào trường'
+  ) {
+
+    note =
+      'Kết quả: ' +
+      (data.ketQua || 'Vào trường');
+  }
+
+
+  /* ==========================
+     RA KHỎI TRƯỜNG
+  ========================== */
+
+  else if (
     data.trangThai ===
     'Ra khỏi trường'
   ) {
 
-    if (
-      data.ketQua ===
-      'Lý do khác'
-    ) {
+    note =
+      'Kết quả: ' +
+      (data.ketQua || 'Ra khỏi trường');
 
-      note =
-        'Lý do: ' +
-        (
-          data.ghiChu ||
-          'Lý do khác'
-        );
 
-    } else {
+    if (data.ghiChu) {
 
-      note =
-        'Lý do: ' +
-        (
-          data.ketQua ||
-          'Về nghỉ'
-        );
+      note +=
+        ' — Lý do: ' +
+        data.ghiChu;
 
     }
-
   }
 
 
-  /*
-   * VÀO HỌC
-   */
+  /* ==========================
+     VÀO HỌC
+  ========================== */
+
   else if (
     data.trangThai ===
     'Vào học'
   ) {
 
     note =
-      data.ketQua || '';
+      'Kết quả: ' +
+      (data.ketQua || '');
 
 
     if (data.ghiChu) {
 
       note +=
-        ' — ' +
+        ' — Lý do: ' +
         data.ghiChu;
 
     }
-
   }
 
 
@@ -1503,7 +1551,7 @@ function showSuccess(
 
 
 /* =========================================================
-   12. HIỂN THỊ QUÉT TRÙNG
+   HIỂN THỊ QUÉT TRÙNG
 ========================================================= */
 
 function showDuplicate(
@@ -1561,6 +1609,7 @@ function showDuplicate(
   if (data.ketQua) {
 
     detail =
+      'Kết quả: ' +
       data.ketQua;
 
   }
@@ -1569,9 +1618,9 @@ function showDuplicate(
   if (data.ghiChu) {
 
     detail +=
-      detail
-        ? ' — ' + data.ghiChu
-        : data.ghiChu;
+      (detail ? ' — ' : '') +
+      'Lý do: ' +
+      data.ghiChu;
 
   }
 
@@ -1584,7 +1633,7 @@ function showDuplicate(
 
 
 /* =========================================================
-   13. HIỂN THỊ LỖI
+   HIỂN THỊ LỖI
 ========================================================= */
 
 function showError(
@@ -1640,29 +1689,11 @@ function showError(
 
 
 /* =========================================================
-   14. LỊCH SỬ
+   LỊCH SỬ V7.5.1
 
-   Quy ước hiển thị:
+   Hiển thị đúng dữ liệu BACKEND trả về:
 
-   Vào trường:
-   Kết quả = —
-   Lý do = —
-
-   Ra khỏi trường / Về nghỉ:
-   Kết quả = Về nghỉ
-   Lý do = —
-
-   Ra khỏi trường / Xin ra ngoài:
-   Kết quả = Xin ra ngoài - sẽ vào lại
-   Lý do = —
-
-   Ra khỏi trường / Lý do khác:
-   Kết quả = Lý do khác
-   Lý do = nội dung nhập
-
-   Vào học:
-   Kết quả = Vào lớp / Không vào lớp
-   Lý do = ghi chú
+   TrangThai | KetQua | GhiChu
 ========================================================= */
 
 function addHistory(
@@ -1682,13 +1713,15 @@ function addHistory(
 
 
   const ketQua =
-    data.ketQua
+    data.ketQua &&
+    String(data.ketQua).trim()
       ? data.ketQua
       : '—';
 
 
   const lyDo =
-    data.ghiChu
+    data.ghiChu &&
+    String(data.ghiChu).trim()
       ? data.ghiChu
       : '—';
 
@@ -1776,7 +1809,7 @@ function addHistory(
 
 
 /* =========================================================
-   15. TẮT CAMERA
+   TẮT CAMERA
 ========================================================= */
 
 async function stopScanner() {
@@ -1790,6 +1823,7 @@ async function stopScanner() {
       '● CAMERA ĐÃ TẮT'
     );
 
+
     return;
   }
 
@@ -1797,6 +1831,7 @@ async function stopScanner() {
   try {
 
     await scanner.stop();
+
 
     scanner.clear();
 
@@ -1826,7 +1861,7 @@ async function stopScanner() {
 
 
 /* =========================================================
-   16. XÓA JSONP
+   XÓA JSONP
 ========================================================= */
 
 function clearJsonp() {
@@ -1836,6 +1871,7 @@ function clearJsonp() {
     clearTimeout(
       jsonpTimer
     );
+
 
     jsonpTimer =
       null;
@@ -1864,7 +1900,7 @@ function clearJsonp() {
 
 
 /* =========================================================
-   17. BỘ ĐẾM
+   BỘ ĐẾM
 ========================================================= */
 
 function updateCounters() {
@@ -1883,7 +1919,7 @@ function updateCounters() {
 
 
 /* =========================================================
-   18. NGƯỜI ĐIỂM DANH
+   NGƯỜI ĐIỂM DANH
 ========================================================= */
 
 function getTeacher() {
@@ -1898,7 +1934,7 @@ function getTeacher() {
 
 
 /* =========================================================
-   19. CHUẨN HÓA QR
+   CHUẨN HÓA QR
 ========================================================= */
 
 function normalizeQr(
@@ -1926,7 +1962,7 @@ function normalizeQr(
 
 
 /* =========================================================
-   20. TRẠNG THÁI HỆ THỐNG
+   TRẠNG THÁI HỆ THỐNG
 ========================================================= */
 
 function setSystemStatus(
@@ -1941,7 +1977,7 @@ function setSystemStatus(
 
 
 /* =========================================================
-   21. ÂM THANH
+   ÂM THANH
 ========================================================= */
 
 function beepSuccess() {
@@ -2028,13 +2064,15 @@ function beep(
     );
 
   } catch(error) {
+
     // Âm thanh không ảnh hưởng chức năng.
+
   }
 }
 
 
 /* =========================================================
-   22. LỖI
+   LỖI
 ========================================================= */
 
 function errorMessage(
@@ -2042,7 +2080,9 @@ function errorMessage(
 ) {
 
   if (!error) {
+
     return 'Không xác định';
+
   }
 
 
@@ -2054,7 +2094,7 @@ function errorMessage(
 
 
 /* =========================================================
-   23. KHỞI TẠO
+   KHỞI TẠO
 ========================================================= */
 
 window.addEventListener(

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Kiểm tra Camera V7.0</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      padding:20px;
+      font-family:Arial,sans-serif;
+      background:#f2f6f8;
+      color:#17324d;
+    }
+
+    .box{
+      max-width:750px;
+      margin:auto;
+      padding:25px;
+      background:white;
+      border-radius:18px;
+      box-shadow:0 8px 30px rgba(0,0,0,.08);
+      text-align:center;
+    }
+
+    h1{
+      margin-top:0;
+      color:#168672;
+    }
+
+    .note{
+      color:#687985;
+      line-height:1.6;
+    }
+
+    button{
+      margin:8px 4px;
+      padding:14px 22px;
+      border:0;
+      border-radius:10px;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .start{
+      background:#168672;
+      color:white;
+    }
+
+    .stop{
+      background:#c63b2d;
+      color:white;
+    }
+
+    video{
+      display:block;
+      width:100%;
+      min-height:300px;
+      max-height:520px;
+      margin-top:20px;
+      border-radius:15px;
+      background:#071117;
+      object-fit:cover;
+    }
+
+    #status{
+      margin-top:15px;
+      padding:14px;
+      border-radius:10px;
+      background:#eaf8f4;
+      color:#086247;
+      font-weight:bold;
+      line-height:1.5;
+    }
+
+    #details{
+      margin-top:10px;
+      padding:12px;
+      border-radius:10px;
+      background:#f6f8fa;
+      color:#5d6b76;
+      font-size:13px;
+      text-align:left;
+      line-height:1.6;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h1>CAMERA ĐIỂM DANH V7.0</h1>
+
+  <p class="note">
+    Đây là bước kiểm tra camera độc lập trước khi
+    kết nối hệ thống điểm danh.
+  </p>
+
+  <button
+    class="start"
+    onclick="startCamera()">
+    BẬT CAMERA
+  </button>
+
+  <button
+    class="stop"
+    onclick="stopCamera()">
+    TẮT CAMERA
+  </button>
+
+  <video
+    id="video"
+    autoplay
+    playsinline
+    muted>
+  </video>
+
+  <div id="status">
+    ● CAMERA CHƯA BẬT
+  </div>
+
+  <div id="details">
+    Đang chờ kiểm tra...
+  </div>
+
+</div>
+
+<script>
+
+let stream = null;
+
+async function startCamera(){
+
+  const video =
+    document.getElementById('video');
+
+  const status =
+    document.getElementById('status');
+
+  const details =
+    document.getElementById('details');
+
+  try{
+
+    stopCamera(false);
+
+    status.innerHTML =
+      '● ĐANG YÊU CẦU CAMERA...';
+
+    details.innerHTML =
+      'Secure context: ' +
+      window.isSecureContext +
+      '<br>Origin: ' +
+      location.origin;
+
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+
+      throw new Error(
+        'Trình duyệt không hỗ trợ getUserMedia.'
+      );
+
+    }
+
+
+    stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        audio:false,
+
+        video:{
+          facingMode:{
+            ideal:'environment'
+          }
+        }
+
+      });
+
+
+    video.srcObject =
+      stream;
+
+    await video.play();
+
+
+    const track =
+      stream.getVideoTracks()[0];
+
+    const settings =
+      track.getSettings();
+
+
+    status.innerHTML =
+      '✓ CAMERA HOẠT ĐỘNG';
+
+
+    details.innerHTML =
+      '<b>Camera:</b> ' +
+      (track.label || 'Không xác định') +
+
+      '<br><b>Độ phân giải:</b> ' +
+      (settings.width || '?') +
+      ' × ' +
+      (settings.height || '?') +
+
+      '<br><b>Secure context:</b> ' +
+      window.isSecureContext +
+
+      '<br><b>Origin:</b> ' +
+      location.origin;
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    status.innerHTML =
+      '✕ KHÔNG MỞ ĐƯỢC CAMERA';
+
+
+    details.innerHTML =
+      '<b>Lỗi:</b> ' +
+      error.name +
+
+      '<br><b>Nội dung:</b> ' +
+      error.message +
+
+      '<br><b>Secure context:</b> ' +
+      window.isSecureContext +
+
+      '<br><b>Origin:</b> ' +
+      location.origin;
+
+  }
+
+}
+
+
+function stopCamera(showMessage = true){
+
+  if(stream){
+
+    stream.getTracks()
+      .forEach(function(track){
+        track.stop();
+      });
+
+    stream = null;
+
+  }
+
+
+  document.getElementById('video')
+    .srcObject = null;
+
+
+  if(showMessage){
+
+    document.getElementById('status')
+      .innerHTML =
+      '● CAMERA ĐÃ TẮT';
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
